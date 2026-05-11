@@ -1,0 +1,34 @@
+<?php
+
+include '../includes/db.php';
+
+$name = $_POST['name'];
+$email = $_POST['email'];
+$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+$role = $_POST['role'];
+
+$check = "SELECT * FROM users WHERE email='$email'";
+$result = $conn->query($check);
+
+if($result->num_rows > 0) {
+
+    echo "Email already exists";
+
+} else {
+
+    $sql = "INSERT INTO users(name,email,password,role)
+            VALUES('$name','$email','$password','$role')";
+
+    if($conn->query($sql)) {
+
+        echo "Signup Successful";
+
+    } else {
+
+        echo "Signup Failed";
+
+    }
+
+}
+
+?>

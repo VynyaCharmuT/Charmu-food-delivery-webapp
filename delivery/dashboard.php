@@ -38,29 +38,123 @@ $my_orders = $conn->query(
 
 <head>
 
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>Delivery Dashboard</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
 
 </head>
 
-<body class="bg-light">
+<body>
 
-<div class="container mt-5">
+<nav class="navbar navbar-expand-lg sticky-top">
 
-<h2>Delivery Dashboard</h2>
+<div class="container">
+
+<a class="navbar-brand"
+href="#">
+
+FoodieHub Rider
+
+</a>
+
+<button class="navbar-toggler"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#navMenu">
+
+<span class="navbar-toggler-icon"></span>
+
+</button>
+
+<div class="collapse navbar-collapse"
+id="navMenu">
+
+<ul class="navbar-nav ms-auto align-items-center">
+
+<li class="nav-item">
+
+<a class="nav-link active"
+href="dashboard.php">
+
+Dashboard
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link"
+href="../logout.php">
+
+Logout
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</nav>
+
+<div class="container py-5">
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+
+<div>
+
+<h1 class="fw-bold">
+
+Delivery Dashboard
+
+</h1>
+
+<p class="text-muted">
+
+Manage and track assigned deliveries
+
+</p>
+
+</div>
+
+</div>
 
 <hr>
 
-<h3>Available Orders</h3>
+<h3 class="fw-bold mb-4">
 
-<table class="table table-bordered bg-white">
+<i class="fa-solid fa-box-open text-primary"></i>
+
+Available Orders
+
+</h3>
+
+<div class="table-responsive">
+
+<table class="table modern-table align-middle">
 
 <tr>
 
 <th>Order ID</th>
 <th>Customer</th>
 <th>Total</th>
+<th>Add-ons</th>
 <th>Action</th>
 
 </tr>
@@ -78,13 +172,50 @@ $my_orders = $conn->query(
 </td>
 
 <td>
-₹<?php echo $row['total_amount']; ?>
+
+<?php if($row['beverage_quantity'] > 0) { ?>
+
+<div class="mb-2">
+
+🥤
+<?php echo $row['beverage_type']; ?>
+
+x <?php echo $row['beverage_quantity']; ?>
+
+</div>
+
+<?php } ?>
+
+<?php if($row['sauce_quantity'] > 0) { ?>
+
+<div class="mb-2">
+
+🍅
+<?php echo $row['sauce_type']; ?>
+
+x <?php echo $row['sauce_quantity']; ?>
+
+</div>
+
+<?php } ?>
+
+<?php if($row['cutlery_persons'] > 0) { ?>
+
+<div>
+
+🍴
+<?php echo $row['cutlery_persons']; ?> persons
+
+</div>
+
+<?php } ?>
+
 </td>
 
 <td>
 
 <a href="accept-order.php?id=<?php echo $row['id']; ?>"
-   class="btn btn-success btn-sm">
+class="btn btn-main">
 
 Accept Delivery
 
@@ -97,18 +228,28 @@ Accept Delivery
 <?php } ?>
 
 </table>
+</div>
 
 <hr>
 
-<h3>My Deliveries</h3>
+<h3 class="fw-bold mb-4 mt-5">
 
-<table class="table table-bordered bg-white">
+<i class="fa-solid fa-motorcycle text-success"></i>
+
+My Deliveries
+
+</h3>
+
+<div class="table-responsive">
+
+<table class="table modern-table align-middle">
 
 <tr>
 
 <th>Order ID</th>
 <th>Customer</th>
 <th>Status</th>
+<th>Add-ons</th>
 <th>Actions</th>
 
 </tr>
@@ -126,13 +267,60 @@ Accept Delivery
 </td>
 
 <td>
+
+<span class="badge bg-warning text-dark p-2">
+
 <?php echo $row['tracking_status']; ?>
+
+</span>
+
+</td>
+
+<td>
+
+<?php if($row['beverage_quantity'] > 0) { ?>
+
+<div class="mb-2">
+
+🥤
+<?php echo $row['beverage_type']; ?>
+
+x <?php echo $row['beverage_quantity']; ?>
+
+</div>
+
+<?php } ?>
+
+<?php if($row['sauce_quantity'] > 0) { ?>
+
+<div class="mb-2">
+
+🍅
+<?php echo $row['sauce_type']; ?>
+
+x <?php echo $row['sauce_quantity']; ?>
+
+</div>
+
+<?php } ?>
+
+<?php if($row['cutlery_persons'] > 0) { ?>
+
+<div>
+
+🍴
+<?php echo $row['cutlery_persons']; ?> persons
+
+</div>
+
+<?php } ?>
+
 </td>
 
 <td>
 
 <a href="update-delivery.php?id=<?php echo $row['id']; ?>"
-   class="btn btn-primary btn-sm">
+class="btn btn-dark">
 
 Update Status
 
@@ -145,15 +333,16 @@ Update Status
 <?php } ?>
 
 </table>
+</div>
 
 <a href="../logout.php"
-   class="btn btn-danger">
+class="btn btn-danger mt-4 px-4 py-2">
 
 Logout
 
 </a>
 
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

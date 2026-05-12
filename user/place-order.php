@@ -10,6 +10,23 @@ $payment_method = $_POST['payment_method'];
 
 $coupon = $_POST['coupon'];
 
+$cutlery_persons =
+$_POST['cutlery_persons'] ?? 0;
+
+$sauce_type =
+$_POST['sauce_type'] ?? '';
+
+$sauce_quantity =
+$_POST['sauce_quantity'] ?? 0;
+
+$beverage_type =
+$_POST['beverage_type'] ?? '';
+
+$beverage_quantity =
+$_POST['beverage_quantity'] ?? 0;
+
+$addon_charges = 0;
+
 $cart = $conn->query(
     "SELECT cart.product_id,
             cart.quantity,
@@ -36,6 +53,46 @@ while($row = $cart->fetch_assoc()) {
     $items[] = $row;
 }
 
+if($cutlery_persons > 2){
+
+    $addon_charges +=
+    ($cutlery_persons - 2) * 10;
+
+}
+
+if($sauce_quantity > 1){
+
+    $addon_charges +=
+    ($sauce_quantity - 1) * 20;
+
+}
+
+if($beverage_type == 'Coke'
+|| $beverage_type == 'Pepsi'){
+
+    $addon_charges +=
+    40 * $beverage_quantity;
+
+}
+
+else if($beverage_type == 'Fresh Juice'){
+
+    $addon_charges +=
+    90 * $beverage_quantity;
+
+}
+
+else if($beverage_type == 'Cold Coffee'){
+
+    $addon_charges +=
+    120 * $beverage_quantity;
+
+}
+
+$total += $addon_charges;
+
+$discount_amount = 0;
+
 if($coupon != '') {
 
     $coupon_sql = $conn->query(
@@ -47,10 +104,46 @@ if($coupon != '') {
 
         $coupon_data = $coupon_sql->fetch_assoc();
 
-        $discount = $coupon_data['discount_percentage'];
+        $minimum_order =
+            $coupon_data['minimum_order'];
 
-        $total = $total - ($total * $discount / 100);
+        if($total >= $minimum_order) {
+
+            $discount =
+                $coupon_data['discount_percentage'];
+
+            $discount_amount =
+                ($total * $discount / 100);
+
+            $total =
+                $total - $discount_amount;
+
+        }
+
+        else {
+
+            $_SESSION['coupon_error'] =
+                "Minimum order amount for this coupon is ₹$minimum_order";
+
+            header("Location: checkout.php");
+
+            exit();
+
+        }
+
     }
+
+    else {
+
+        $_SESSION['coupon_error'] =
+            "Invalid Coupon Code";
+
+        header("Location: checkout.php");
+
+        exit();
+
+    }
+
 }
 
 $conn->query(
@@ -59,7 +152,13 @@ $conn->query(
         total_amount,
         payment_method,
         payment_status,
-        order_status
+        order_status,
+        cutlery_persons,
+        sauce_type,
+        sauce_quantity,
+        beverage_type,
+        beverage_quantity,
+        addon_charges
     )
 
     VALUES(
@@ -67,7 +166,13 @@ $conn->query(
         '$total',
         '$payment_method',
         'Pending',
-        'Order Placed'
+        'Order Placed',
+        '$cutlery_persons',
+        '$sauce_type',
+        '$sauce_quantity',
+        '$beverage_type',
+        '$beverage_quantity',
+        '$addon_charges'
     )"
 );
 
@@ -80,18 +185,18 @@ foreach($items as $item) {
     $quantity = $item['quantity'];
 
     $conn->query(
-        "INSERT INTO order_items(
-            order_id,
-            product_id,
-            quantity
-        )
+    "INSERT INTO order_items(
+        order_id,
+        product_id,
+        quantity
+    )
 
-        VALUES(
-            '$order_id',
-            '$product_id',
-            '$quantity'
-        )"
-    );
+    VALUES(
+        '$order_id',
+        '$product_id',
+        '$quantity'
+    )"
+);
 }
 
 $conn->query(

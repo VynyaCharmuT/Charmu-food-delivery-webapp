@@ -30,30 +30,119 @@ $total = 0;
 
 <head>
 
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>Cart</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
 
 </head>
 
 <body class="bg-light">
 
-<div class="container mt-5">
+<nav class="navbar navbar-expand-lg sticky-top">
 
-<h2>Your Cart</h2>
+<div class="container">
 
-<table class="table table-bordered bg-white">
+<a class="navbar-brand"
+href="home.php">
 
-<tr>
+FoodieHub
 
-<th>Image</th>
-<th>Name</th>
-<th>Price</th>
-<th>Quantity</th>
-<th>Total</th>
-<th>Action</th>
+</a>
 
-</tr>
+<button class="navbar-toggler"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#navMenu">
+
+<span class="navbar-toggler-icon"></span>
+
+</button>
+
+<div class="collapse navbar-collapse"
+id="navMenu">
+
+<ul class="navbar-nav ms-auto align-items-center">
+
+<li class="nav-item">
+
+<a class="nav-link"
+href="home.php">
+
+Home
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link active"
+href="cart.php">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Cart
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link"
+href="../logout.php">
+
+Logout
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</nav>
+
+<div class="container py-5">
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+
+<div>
+
+<h1 class="fw-bold">
+
+Your Cart
+
+</h1>
+
+<p class="text-muted">
+
+Review your selected food items
+
+</p>
+
+</div>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-8">
 
 <?php while($row = $result->fetch_assoc()) {
 
@@ -63,72 +152,160 @@ $total += $item_total;
 
 ?>
 
-<tr>
+<div class="product-card mb-4">
 
-<td>
+<div class="row g-0 align-items-center">
+
+<div class="col-md-4">
 
 <img src="../assets/images/<?php echo $row['image']; ?>"
-     width="80">
+style="
+height:250px;
+object-fit:cover;
+width:100%;
+">
 
-</td>
+</div>
 
-<td>
+<div class="col-md-8">
+
+<div class="product-info">
+
+<div class="d-flex justify-content-between">
+
+<h3 class="fw-bold">
+
 <?php echo $row['name']; ?>
-</td>
 
-<td>
+</h3>
+
+</div>
+
+<h4 class="price my-3">
+
 ₹<?php echo $row['price']; ?>
-</td>
 
-<td>
+</h4>
+
+<div class="d-flex align-items-center gap-3 my-3">
 
 <a href="decrease-qty.php?id=<?php echo $row['id']; ?>"
-   class="btn btn-sm btn-danger">
+class="btn btn-outline-dark">
 
 -
 
 </a>
 
+<span class="fw-bold">
+
 <?php echo $row['quantity']; ?>
 
+</span>
+
 <a href="increase-qty.php?id=<?php echo $row['id']; ?>"
-   class="btn btn-sm btn-success">
+class="btn btn-outline-dark">
 
 +
 
 </a>
 
-</td>
+</div>
 
-<td>
+<p>
+
+Total:
+<strong>
+
 ₹<?php echo $item_total; ?>
-</td>
 
-<td>
+</strong>
+
+</p>
 
 <a href="remove-cart.php?id=<?php echo $row['id']; ?>"
-   class="btn btn-danger btn-sm">
+class="btn btn-danger">
+
+<i class="fa-solid fa-trash"></i>
 
 Remove
 
 </a>
 
-</td>
+</div>
 
-</tr>
+</div>
+
+</div>
+
+</div>
 
 <?php } ?>
 
-</table>
+</div>
 
-<h3 class="text-end">
-Grand Total: ₹<?php echo $total; ?>
+<div class="col-lg-4">
+
+<div class="card border-0 shadow-lg p-4"
+style="border-radius:25px;">
+
+<h3 class="fw-bold mb-4">
+
+Order Summary
+
 </h3>
 
-<div class="text-end">
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Subtotal
+
+</span>
+
+<span>
+
+₹<?php echo $total; ?>
+
+</span>
+
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+
+<span>
+
+Delivery
+
+</span>
+
+<span>
+
+₹40
+
+</span>
+
+</div>
+
+<hr>
+
+<div class="d-flex justify-content-between mb-4">
+
+<h4>
+
+Total
+
+</h4>
+
+<h4>
+
+₹<?php echo $total + 40; ?>
+
+</h4>
+
+</div>
 
 <a href="checkout.php"
-   class="btn btn-primary">
+class="btn btn-main w-100">
 
 Proceed To Checkout
 
@@ -138,5 +315,10 @@ Proceed To Checkout
 
 </div>
 
+</div>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

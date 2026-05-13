@@ -70,19 +70,69 @@ Track Your Order
 
 </h1>
 
-<p class="text-muted">
+<p class="text-muted mb-3">
 
 Order #<?php echo $row['id']; ?>
 
 </p>
 
+<h4 class="fw-bold text-warning"
+id="liveStatus">
+
+<?php echo $status; ?>
+
+</h4>
+
+<div class="live-status-badge">
+
+<?php echo $status; ?>
+
 </div>
 
-<div class="card border-0 shadow-lg p-5"
-style="border-radius:30px;">
+</div>
 
-<div class="tracking-step
-<?php if($status == 'Order Placed' || $status == 'Preparing' || $status == 'Out For Delivery' || $status == 'Delivered') echo 'active'; ?>">
+<div class="card border-0 shadow-lg p-5 tracking-container"
+style="border-radius:30px;"
+id="trackingContainer">
+
+<div id="deliveryBike"
+class="delivery-bike
+
+<?php
+
+if($status == 'Order Placed'){
+
+echo 'bike-placed';
+
+}
+
+elseif($status == 'Preparing'){
+
+echo 'bike-preparing';
+
+}
+
+elseif($status == 'Out For Delivery'){
+
+echo 'bike-out';
+
+}
+
+elseif($status == 'Delivered'){
+
+echo 'bike-delivered';
+
+}
+
+?>
+">
+
+<i class="fa-solid fa-motorcycle"></i>
+
+</div>
+
+<div id="stepPlaced"
+class="tracking-step">
 
 <div class="tracking-icon">
 
@@ -91,15 +141,13 @@ style="border-radius:30px;">
 </div>
 
 <h5>
-
 Order Placed
-
 </h5>
 
 </div>
 
-<div class="tracking-step
-<?php if($status == 'Preparing' || $status == 'Out For Delivery' || $status == 'Delivered') echo 'active'; ?>">
+<div id="stepPreparing"
+class="tracking-step">
 
 <div class="tracking-icon">
 
@@ -115,8 +163,8 @@ Preparing
 
 </div>
 
-<div class="tracking-step
-<?php if($status == 'Out For Delivery' || $status == 'Delivered') echo 'active'; ?>">
+<div id="stepOut"
+class="tracking-step">
 
 <div class="tracking-icon">
 
@@ -132,8 +180,8 @@ Out For Delivery
 
 </div>
 
-<div class="tracking-step
-<?php if($status == 'Delivered') echo 'active'; ?>">
+<div id="stepDelivered"
+class="tracking-step">
 
 <div class="tracking-icon">
 
@@ -159,6 +207,32 @@ style="border-radius:25px;">
 Order Summary
 
 </h3>
+
+<p class="mb-4">
+
+<div class="alert alert-warning border-0 shadow-sm mb-4"
+style="border-radius:15px;">
+
+<h5 class="fw-bold mb-2">
+
+<i class="fa-solid fa-clock"></i>
+
+Estimated Delivery Time
+
+</h5>
+
+<p class="mb-0 fs-5 fw-semibold"
+id="liveETA">
+
+</div>
+
+<span id="liveETA">
+
+<?php echo $row['estimated_delivery']; ?>
+
+</span>
+
+</p>
 
 <p>
 
@@ -232,6 +306,142 @@ Add-on Charges:
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
 
+const orderId =
+<?php echo $row['id']; ?>;
+
+function loadTracking(){
+
+fetch(
+`tracking-status.php?id=${orderId}`
+)
+
+.then(response => response.json())
+
+.then(data => {
+
+document.getElementById(
+"liveStatus"
+).innerHTML =
+data.tracking_status;
+
+document.getElementById(
+"liveETA"
+).innerHTML =
+data.estimated_delivery;
+
+/* REMOVE ACTIVE */
+
+document.getElementById(
+"stepPlaced"
+).classList.remove("active");
+
+document.getElementById(
+"stepPreparing"
+).classList.remove("active");
+
+document.getElementById(
+"stepOut"
+).classList.remove("active");
+
+document.getElementById(
+"stepDelivered"
+).classList.remove("active");
+
+const bike =
+document.getElementById(
+"deliveryBike"
+);
+
+/* ORDER PLACED */
+
+if(data.tracking_status ==
+"Order Placed"){
+
+document.getElementById(
+"stepPlaced"
+).classList.add("active");
+
+bike.className =
+"delivery-bike bike-placed";
+
+}
+
+/* PREPARING */
+
+else if(data.tracking_status ==
+"Preparing"){
+
+document.getElementById(
+"stepPlaced"
+).classList.add("active");
+
+document.getElementById(
+"stepPreparing"
+).classList.add("active");
+
+bike.className =
+"delivery-bike bike-preparing";
+
+}
+
+/* OUT FOR DELIVERY */
+
+else if(data.tracking_status ==
+"Out For Delivery"){
+
+document.getElementById(
+"stepPlaced"
+).classList.add("active");
+
+document.getElementById(
+"stepPreparing"
+).classList.add("active");
+
+document.getElementById(
+"stepOut"
+).classList.add("active");
+
+bike.className =
+"delivery-bike bike-out";
+
+}
+
+/* DELIVERED */
+
+else if(data.tracking_status ==
+"Delivered"){
+
+document.getElementById(
+"stepPlaced"
+).classList.add("active");
+
+document.getElementById(
+"stepPreparing"
+).classList.add("active");
+
+document.getElementById(
+"stepOut"
+).classList.add("active");
+
+document.getElementById(
+"stepDelivered"
+).classList.add("active");
+
+bike.className =
+"delivery-bike bike-delivered";
+
+}
+
+});
+
+}
+
+loadTracking();
+
+setInterval(loadTracking, 3000);
+
+</script>
 </body>
 </html>

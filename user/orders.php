@@ -6,11 +6,26 @@ include '../includes/db.php';
 
 $user_id = $_SESSION['user_id'];
 
-$orders = $conn->query(
+$current_orders = $conn->query(
 
     "SELECT *
      FROM orders
+
      WHERE user_id = $user_id
+     AND tracking_status != 'Delivered'
+
+     ORDER BY id DESC"
+
+);
+
+$previous_orders = $conn->query(
+
+    "SELECT *
+     FROM orders
+
+     WHERE user_id = $user_id
+     AND tracking_status = 'Delivered'
+
      ORDER BY id DESC"
 
 );
@@ -141,9 +156,15 @@ Track and manage your food orders
 
 </div>
 
-<div class="row g-4">
+<h3 class="fw-bold mb-4">
 
-<?php while($row = $orders->fetch_assoc()) { ?>
+Current Orders
+
+</h3>
+
+<div class="row g-4 mb-5">
+
+<?php while($row = $current_orders->fetch_assoc()) { ?>
 
 <div class="col-lg-6">
 
@@ -166,7 +187,7 @@ Order #<?php echo $row['id']; ?>
 
 </div>
 
-<p class="mb-2">
+<p>
 
 <b>Total:</b>
 
@@ -174,58 +195,23 @@ Order #<?php echo $row['id']; ?>
 
 </p>
 
-<?php if($row['cutlery_persons'] > 0) { ?>
+<p>
 
-<p class="mb-2">
+<b>Estimated Delivery:</b>
 
-<b>Cutlery:</b>
-
-For <?php echo $row['cutlery_persons']; ?> persons
+<?php echo $row['estimated_delivery']; ?>
 
 </p>
 
-<?php } ?>
+<p>
 
-<?php if($row['sauce_quantity'] > 0) { ?>
+<b>Ordered On:</b>
 
-<p class="mb-2">
-
-<b>Sauces:</b>
-
-<?php echo $row['sauce_type']; ?>
-
-x <?php echo $row['sauce_quantity']; ?>
+<?php echo $row['created_at']; ?>
 
 </p>
 
-<?php } ?>
-
-<?php if($row['beverage_quantity'] > 0) { ?>
-
-<p class="mb-2">
-
-<b>Beverage:</b>
-
-<?php echo $row['beverage_type']; ?>
-
-x <?php echo $row['beverage_quantity']; ?>
-
-</p>
-
-<?php } ?>
-
-<?php if($row['addon_charges'] > 0) { ?>
-
-<p class="mb-4 text-success fw-bold">
-
-Add-on Charges:
-₹<?php echo $row['addon_charges']; ?>
-
-</p>
-
-<?php } ?>
-
-<div class="d-flex gap-3">
+<div class="d-flex gap-3 mt-3">
 
 <a href="track-order.php?id=<?php echo $row['id']; ?>"
 class="btn btn-main">
@@ -234,8 +220,75 @@ Track Order
 
 </a>
 
-<a href="home.php"
+</div>
+
+</div>
+
+</div>
+
+<?php } ?>
+
+</div>
+
+<h3 class="fw-bold mb-4">
+
+Previous Orders
+
+</h3>
+
+<div class="row g-4">
+
+<?php while($row = $previous_orders->fetch_assoc()) { ?>
+
+<div class="col-lg-6">
+
+<div class="card border-0 shadow-sm p-4"
+style="border-radius:25px;
+opacity:0.9;">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+<h4 class="fw-bold">
+
+Order #<?php echo $row['id']; ?>
+
+</h4>
+
+<span class="badge bg-success p-2">
+
+Delivered
+
+</span>
+
+</div>
+
+<p>
+
+<b>Total:</b>
+
+₹<?php echo $row['total_amount']; ?>
+
+</p>
+
+<p>
+
+<b>Delivered On:</b>
+
+<?php echo $row['created_at']; ?>
+
+</p>
+
+<div class="d-flex gap-3 mt-3">
+
+<a href="track-order.php?id=<?php echo $row['id']; ?>"
 class="btn btn-outline-dark">
+
+View Details
+
+</a>
+
+<a href="home.php"
+class="btn btn-main">
 
 Order Again
 

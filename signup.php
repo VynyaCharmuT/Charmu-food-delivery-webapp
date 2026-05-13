@@ -1,3 +1,44 @@
+<?php
+
+include 'includes/db.php';
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+$name = $_POST['name'];
+
+$email = $_POST['email'];
+
+$password = $_POST['password'];
+
+$role = $_POST['role'];
+
+$conn->query(
+
+"INSERT INTO users(
+name,
+email,
+password,
+role
+)
+
+VALUES(
+'$name',
+'$email',
+'$password',
+'$role'
+)"
+
+);
+
+header(
+"Location: login.php"
+);
+
+exit();
+
+}
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -15,68 +56,140 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 href="assets/css/style.css">
 </head>
 
-<body class="bg-light">
+<body class="auth-body">
 
-<div class="container mt-5">
+<div class="auth-container">
 
-    <div class="row justify-content-center">
+<div class="auth-left signup-left">
 
-        <div class="col-md-5">
+<div class="auth-content">
 
-            <div class="card shadow">
+<h1>
 
-                <div class="card-header text-center">
-                    <h3>Create Account</h3>
-                </div>
+Join FoodieHub
 
-                <div class="card-body">
+</h1>
 
-                    <form action="api/signup.php" method="POST">
+<p>
 
-                        <input type="text"
-                               name="name"
-                               class="form-control mb-3"
-                               placeholder="Full Name"
-                               required>
+Create your account and enjoy modern food delivery.
 
-                        <input type="email"
-                               name="email"
-                               class="form-control mb-3"
-                               placeholder="Email"
-                               required>
+</p>
 
-                        <input type="password"
-                               name="password"
-                               class="form-control mb-3"
-                               placeholder="Password"
-                               required>
+<div class="auth-features">
 
-                        <select name="role" class="form-control mb-3">
+<div>
 
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                            <option value="delivery">Delivery Agent</option>
+<i class="fa-solid fa-pizza-slice"></i>
 
-                        </select>
+Trending Combos
 
-                        <button class="btn btn-primary w-100">
-                            Signup
-                        </button>
+</div>
 
-                    </form>
+<div>
 
-                    <div class="text-center mt-3">
-                        Already have an account?
-                        <a href="login.php">Login</a>
-                    </div>
+<i class="fa-solid fa-percent"></i>
 
-                </div>
+Coupon Rewards
 
-            </div>
+</div>
 
-        </div>
+<div>
 
-    </div>
+<i class="fa-solid fa-star"></i>
+
+Premium Experience
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="auth-right">
+
+<div class="auth-card">
+
+<h2 class="mb-3">
+
+Create Account
+
+</h2>
+
+<p class="text-muted mb-4">
+
+Start your FoodieHub journey
+
+</p>
+
+<form method="POST">
+
+<input type="text"
+name="name"
+class="auth-input"
+placeholder="Full Name"
+required>
+
+<input type="email"
+name="email"
+class="auth-input"
+placeholder="Email Address"
+required>
+
+<input type="password"
+name="password"
+class="auth-input"
+placeholder="Password"
+required>
+<select name="role"
+class="auth-input"
+required>
+
+<option value="user">
+
+User
+
+</option>
+
+<option value="delivery">
+
+Delivery Agent
+
+</option>
+
+<option value="admin">
+
+Admin
+
+</option>
+
+</select>
+
+<button class="btn btn-main auth-btn">
+
+Create Account
+
+</button>
+
+</form>
+
+<div class="auth-footer">
+
+Already have an account?
+
+<a href="login.php">
+
+Login
+
+</a>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 

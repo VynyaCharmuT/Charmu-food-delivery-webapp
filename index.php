@@ -147,7 +147,7 @@ Order Now
 </a>
 
 <a href="login.php"
-class="btn btn-light">
+class="btn btn-main">
 
 Login
 

@@ -113,6 +113,17 @@ Cart
 <li class="nav-item">
 
 <a class="nav-link"
+href="orders.php">
+
+My Orders
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a class="nav-link"
 href="../logout.php">
 
 Logout
@@ -220,7 +231,7 @@ Beverages
 
 <?php while($row = $products->fetch_assoc()) { ?>
 
-<div class="col-lg-4 col-md-6 mb-4">
+<div class="col-lg-3 col-md-6 col-sm-6 mb-4">
 
 <div class="product-card">
 
@@ -289,10 +300,6 @@ class="btn btn-main w-100 mt-2">
 Add To Cart
 
 </a>
-
-</div>
-
-</div>
 
 </div>
 

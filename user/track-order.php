@@ -36,6 +36,9 @@ content="width=device-width, initial-scale=1.0">
 rel="stylesheet">
 
 <link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 <link rel="stylesheet"
@@ -194,6 +197,23 @@ class="tracking-step">
 Delivered
 
 </h5>
+
+</div>
+
+</div>
+
+<div class="card border-0 shadow-lg p-4 mt-5"
+style="border-radius:25px;">
+
+<h3 class="fw-bold mb-4">
+
+Live Delivery Tracking
+
+</h3>
+
+<div id="deliveryMap"
+style="height:400px;
+border-radius:20px;">
 
 </div>
 
@@ -441,6 +461,147 @@ bike.className =
 loadTracking();
 
 setInterval(loadTracking, 3000);
+
+</script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+<script>
+
+/* MAP */
+
+const map = L.map('deliveryMap')
+.setView([17.3850, 78.4867], 13);
+
+/* MAP LAYER */
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+maxZoom: 19,
+}
+).addTo(map);
+
+/* CUSTOMER LOCATION */
+
+const customerMarker =
+L.marker([17.3850, 78.4867])
+
+.addTo(map)
+
+.bindPopup(
+'Delivery Destination'
+)
+
+.openPopup();
+
+/* DELIVERY RIDER */
+
+let riderLat = 17.3750;
+let riderLng = 78.4767;
+
+/* BIKE ICON */
+
+const bikeIcon = L.icon({
+
+iconUrl:
+'https://cdn-icons-png.flaticon.com/512/2972/2972185.png',
+
+iconSize: [45,45],
+
+iconAnchor: [22,22]
+
+});
+
+/* RIDER MARKER */
+
+const riderMarker =
+L.marker(
+[riderLat, riderLng],
+{
+icon: bikeIcon
+}
+)
+
+.addTo(map)
+
+.bindPopup(
+'Delivery Rider'
+);
+
+/* ROUTE ENGINE */
+
+const control = L.Routing.control({
+
+waypoints: [
+
+L.latLng(riderLat, riderLng),
+
+L.latLng(17.3850, 78.4867)
+
+],
+
+routeWhileDragging: false,
+
+draggableWaypoints: false,
+
+addWaypoints: false,
+
+show: false
+
+})
+
+.addTo(map);
+
+/* MOVE RIDER */
+
+function moveRider(){
+
+riderLat += 0.001;
+
+riderLng += 0.001;
+
+/* MOVE MARKER */
+
+riderMarker.setLatLng(
+[riderLat, riderLng]
+);
+
+/* UPDATE ROUTE */
+
+control.setWaypoints([
+
+L.latLng(riderLat, riderLng),
+
+L.latLng(17.3850, 78.4867)
+
+]);
+
+}
+
+/* AUTO MOVE */
+
+setInterval(moveRider, 3000);
+
+/* LIVE ETA */
+
+control.on('routesfound', function(e) {
+
+const routes = e.routes;
+
+const summary = routes[0].summary;
+
+const minutes =
+Math.round(summary.totalTime / 60);
+
+document.getElementById(
+"liveETA"
+).innerHTML =
+minutes + " mins";
+
+});
 
 </script>
 </body>

@@ -57,8 +57,6 @@ href="../assets/css/style.css">
 
 </head>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <body class="bg-light">
 
 <nav class="navbar navbar-expand-lg sticky-top">
@@ -227,13 +225,15 @@ Beverages
 
 </div>
 
-<div class="row g-4">
+<div class="container py-5">
+
+<div class="products-row">
 
 <?php while($row = $products->fetch_assoc()) { ?>
 
-<div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+<div class="product-column">
 
-<div class="product-card">
+<div class="product-card w-100">
 
 <img src="../assets/images/<?php echo $row['image']; ?>">
 
@@ -292,14 +292,70 @@ View Details
 
 </a>
 
-<a href="add-cart.php?id=<?php echo $row['id']; ?>"
-class="btn btn-main w-100 mt-2">
+<div class="cart-controls mt-3">
+
+<button
+class="btn btn-main w-100 addCartBtn"
+data-id="<?php echo $row['id']; ?>"
+data-name="<?php echo $row['name']; ?>"
+data-price="<?php echo $row['price']; ?>">
 
 <i class="fa-solid fa-cart-plus"></i>
-
 Add To Cart
 
-</a>
+</button>
+
+<div class="quantity-box d-none mt-3"
+id="qtyBox<?php echo $row['id']; ?>">
+
+<div class="d-flex align-items-center gap-3">
+
+<button class="btn btn-outline-dark qty-minus"
+data-id="<?php echo $row['id']; ?>">
+
+-
+
+</button>
+
+<span class="fw-bold"
+id="qty<?php echo $row['id']; ?>">
+
+1
+
+</span>
+
+<button class="btn btn-outline-dark qty-plus"
+data-id="<?php echo $row['id']; ?>">
+
++
+
+</button>
+
+</div>
+
+<div class="fw-bold text-success">
+
+₹<span id="itemTotal<?php echo $row['id']; ?>">
+
+<?php echo $row['price']; ?>
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="fw-bold text-success">
+₹<span id="itemTotal<?php echo $row['id']; ?>">
+<?php echo $row['price']; ?>
+</span>
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -312,6 +368,165 @@ Add To Cart
 </div>
 
 </div>
+
+<div class="floating-cart d-none"
+id="floatingCart">
+
+<div>
+
+<span id="cartItemCount">
+0
+</span>
+items added
+
+</div>
+
+<div class="fw-bold">
+₹<span id="cartGrandTotal">
+0
+</span>
+</div>
+
+<a href="cart.php"
+class="btn btn-light fw-bold">
+Go To Cart
+</a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+let grandTotal = 0;
+let totalItems = 0;
+
+/* ADD TO CART */
+
+document.querySelectorAll('.addCartBtn').forEach(button => {
+
+    button.addEventListener('click', function(){
+
+        const id = this.dataset.id;
+        const price = parseInt(this.dataset.price);
+
+        fetch(`add-cart.php?id=${id}`)
+        .then(res => res.text())
+        .then(data => {
+
+            this.classList.add('d-none');
+
+            document
+            .getElementById(`qtyBox${id}`)
+            .classList.remove('d-none');
+
+            grandTotal += price;
+            totalItems += 1;
+
+            updateFloatingCart();
+
+        });
+
+    });
+
+});
+
+/* QUANTITY INCREASE */
+
+document.querySelectorAll('.qty-plus').forEach(button => {
+
+    button.addEventListener('click', function(){
+
+        const id = this.dataset.id;
+
+        const qtyElement =
+        document.getElementById(`qty${id}`);
+
+        let qty =
+        parseInt(qtyElement.innerText);
+
+        qty++;
+
+        qtyElement.innerText = qty;
+
+        const price =
+        parseInt(
+        document.querySelector(
+        `.addCartBtn[data-id="${id}"]`
+        ).dataset.price
+        );
+
+        document.getElementById(
+        `itemTotal${id}`
+        ).innerText = qty * price;
+
+        grandTotal += price;
+
+        updateFloatingCart();
+
+    });
+
+});
+
+/* QUANTITY DECREASE */
+
+document.querySelectorAll('.qty-minus').forEach(button => {
+
+    button.addEventListener('click', function(){
+
+        const id = this.dataset.id;
+
+        const qtyElement =
+        document.getElementById(`qty${id}`);
+
+        let qty =
+        parseInt(qtyElement.innerText);
+
+        if(qty > 1){
+
+            qty--;
+
+            qtyElement.innerText = qty;
+
+            const price =
+            parseInt(
+            document.querySelector(
+            `.addCartBtn[data-id="${id}"]`
+            ).dataset.price
+            );
+
+            document.getElementById(
+            `itemTotal${id}`
+            ).innerText = qty * price;
+
+            grandTotal -= price;
+
+            updateFloatingCart();
+        }
+
+    });
+
+});
+
+/* FLOATING CART */
+
+function updateFloatingCart(){
+
+    document
+    .getElementById('floatingCart')
+    .classList.remove('d-none');
+
+    document
+    .getElementById('cartGrandTotal')
+    .innerText = grandTotal;
+
+    document
+    .getElementById('cartItemCount')
+    .innerText = totalItems;
+
+}
+
+</script>
 
 </body>
 </html>

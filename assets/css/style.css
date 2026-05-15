@@ -380,6 +380,7 @@ box-shadow:0 20px 50px rgba(255,107,0,0.3);
 
 }
 
+/*
 .food-deck-container{
 
 position:relative;
@@ -501,7 +502,8 @@ color:#ffb347;
 
 }
 
-@keyframes floatCard{
+@keyframes floatCard
+{
 
 0%{
 transform:rotate(-4deg) translateY(0px);
@@ -516,6 +518,7 @@ transform:rotate(-4deg) translateY(0px);
 }
 
 }
+*/
 
 .auth-body{
 
@@ -926,13 +929,6 @@ object-fit:cover;
 
 }
 
-.row.g-4{
-
-display:flex;
-flex-wrap:wrap;
-
-}
-
 .product-card{
 
 width:100%;
@@ -955,20 +951,18 @@ box-shadow:0 20px 40px rgba(0,0,0,0.15);
 .product-card img{
 
 width:100%;
-height:220px;
+
+height:240px;
+
 object-fit:cover;
+
+display:block;
 
 }
 
 .product-info{
 
 padding:20px;
-
-}
-
-.col-lg-3{
-
-display:flex;
 
 }
 
@@ -1153,5 +1147,171 @@ top:360px;
 top:510px;
 
 color:#28a745;
+
+}
+
+/* FLOATING CART */
+
+.floating-cart{
+
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+
+background:#ff6b00;
+color:white;
+
+padding:18px 30px;
+border-radius:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+
+width:90%;
+max-width:700px;
+
+z-index:9999;
+
+font-weight:600;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+animation:slideUp 0.4s ease;
+
+}
+
+@keyframes slideUp{
+
+from{
+opacity:0;
+transform:translate(-50%,100px);
+}
+
+to{
+opacity:1;
+transform:translate(-50%,0);
+}
+
+}
+
+/* PRODUCT CARD */
+
+.product-card{
+
+background:white;
+border-radius:20px;
+overflow:hidden;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+
+transition:0.3s;
+
+height:100%;
+
+}
+
+.product-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+
+}
+
+.product-card img{
+
+width:100%;
+height:240px;
+object-fit:cover;
+display:block;
+
+}
+
+.product-info{
+
+padding:20px;
+
+}
+
+/* QUANTITY BOX */
+
+.quantity-box{
+
+background:#fff4eb;
+
+padding:12px;
+
+border-radius:15px;
+
+margin-top:12px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+}
+
+/* QUANTITY BUTTONS */
+
+.qty-minus,
+.qty-plus{
+
+width:40px;
+height:40px;
+
+font-size:18px;
+font-weight:bold;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+}
+
+/* FORCE PRODUCT GRID */
+
+.products-row{
+
+display:flex !important;
+flex-wrap:wrap !important;
+
+margin-left:-12px;
+margin-right:-12px;
+
+}
+
+.product-column{
+
+width:25% !important;
+
+padding:12px;
+
+}
+
+@media(max-width:992px){
+
+.product-column{
+
+width:50% !important;
+
+}
+
+}
+
+@media(max-width:576px){
+
+.product-column{
+
+width:100% !important;
+
+}
+
+}
+
+.leaflet-routing-container{
+
+display:none !important;
 
 }

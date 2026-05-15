@@ -39,6 +39,9 @@ rel="stylesheet">
 href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <link rel="stylesheet"
+href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+
+<link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 <link rel="stylesheet"
@@ -466,8 +469,6 @@ setInterval(loadTracking, 3000);
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
 <script>
 
 /* MAP */
@@ -559,9 +560,8 @@ show: false
 
 function moveRider(){
 
-riderLat += 0.001;
-
-riderLng += 0.001;
+riderLat += 0.0003;
+riderLng += 0.0003;
 
 /* MOVE MARKER */
 
@@ -583,7 +583,7 @@ L.latLng(17.3850, 78.4867)
 
 /* AUTO MOVE */
 
-setInterval(moveRider, 3000);
+setInterval(moveRider, 1000);
 
 /* LIVE ETA */
 

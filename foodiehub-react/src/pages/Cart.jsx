@@ -130,31 +130,29 @@ const user = JSON.parse(
 
                 )}
 
-                <div className="mt-5">
 
-                    <h2>
+   <div className="mt-5">
 
-                        Grand Total:
-                        ₹{grandTotal}
-                        <div className="mt-4">
+    <h2>
+
+        Grand Total:
+        ₹{grandTotal}
+
+    </h2>
 
     <button
 
-    className="btn btn-success btn-lg"
+    className="btn btn-warning mt-3"
 
-    onClick={placeOrder}
+    onClick={() => navigate('/checkout')}
 
     >
 
-        Place Order
+        Proceed To Checkout
 
     </button>
 
 </div>
-
-                    </h2>
-
-                </div>
 
             </div>
 

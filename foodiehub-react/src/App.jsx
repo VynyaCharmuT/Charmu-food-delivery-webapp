@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductDetails from './pages/ProductDetails';
 import ProtectedRoute from './protected/ProtectedRoute';
+import Checkout from './pages/Checkout';
 
 function App(){
 
@@ -18,6 +19,9 @@ function App(){
       <Routes>
 
         <Route path="/" element={<Home />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/track/:id" element={<TrackOrder />} />
 
 <Route
 

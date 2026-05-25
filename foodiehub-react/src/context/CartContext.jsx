@@ -134,6 +134,7 @@ function CartProvider({ children }){
         value={{
 
             cart,
+            setCart,
             addToCart,
             increaseQty,
             decreaseQty,

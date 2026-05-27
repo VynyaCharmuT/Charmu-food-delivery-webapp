@@ -12,6 +12,7 @@ import Checkout from './pages/Checkout';
 import AdminOrders from './pages/AdminOrders';
 import AdminProducts from './pages/AdminProducts';
 import AddProduct from './admin/AddProduct';
+import DeliveryDashboard from './pages/DeliveryDashboard';
 
 function App(){
 
@@ -28,7 +29,7 @@ function App(){
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/products" element={<AdminProducts />} />
         <Route path="/admin/add-product" element={<AddProduct />} />
-
+        <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
 <Route
 
 path="/cart"

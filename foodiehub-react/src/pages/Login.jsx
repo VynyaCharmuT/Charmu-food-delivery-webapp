@@ -12,6 +12,8 @@ function Login(){
 
     const [password, setPassword] = useState('');
 
+    const [role, setRole] = useState('user');
+
     const handleLogin = async (e) => {
 
         e.preventDefault();
@@ -33,7 +35,8 @@ function Login(){
             body: JSON.stringify({
 
                 email,
-                password
+                password,
+                role
 
             })
 
@@ -53,7 +56,23 @@ function Login(){
 
             alert('Login Successful');
 
-            navigate('/');
+            if(data.user.role === 'admin'){
+
+    navigate('/admin/dashboard');
+
+}
+
+else if(data.user.role === 'delivery'){
+
+    navigate('/delivery/dashboard');
+
+}
+
+else{
+
+    navigate('/');
+
+}
 
         }
 
@@ -118,6 +137,38 @@ function Login(){
                                 }
 
                                 />
+
+                                <select
+
+                                className="form-control mb-3"
+
+                                onChange={(e)=>
+
+                                setRole(e.target.value)
+
+                                }
+
+                                >
+
+                                    <option value="user">
+
+                                        User
+
+                                    </option>
+
+                                    <option value="admin">
+
+                                        Admin
+
+                                    </option>
+
+                                    <option value="delivery">
+
+                                        Delivery Agent
+
+                                    </option>
+
+                                </select>
 
                                 <button
 

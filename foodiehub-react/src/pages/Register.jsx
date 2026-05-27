@@ -14,6 +14,8 @@ function Register(){
 
     const [password, setPassword] = useState('');
 
+    const [role, setRole] = useState('user');
+
     const handleRegister = async (e) => {
 
         e.preventDefault();
@@ -34,11 +36,12 @@ function Register(){
 
             body: JSON.stringify({
 
-                name,
-                email,
-                password
+    name,
+    email,
+    password,
+    role
 
-            })
+})
 
         });
 
@@ -119,6 +122,38 @@ function Register(){
                                 }
 
                                 />
+
+                                <select
+
+className="form-control mb-3"
+
+onChange={(e)=>
+
+setRole(e.target.value)
+
+}
+
+>
+
+    <option value="user">
+
+        User
+
+    </option>
+
+    <option value="admin">
+
+        Admin
+
+    </option>
+
+    <option value="delivery">
+
+        Delivery Agent
+
+    </option>
+
+</select>
 
                                 <button
 

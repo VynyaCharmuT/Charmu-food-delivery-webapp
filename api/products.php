@@ -6,18 +6,24 @@ header("Content-Type: application/json");
 
 include '../includes/db.php';
 
-$sql = "SELECT * FROM orders ORDER BY id DESC";
+/* FETCH PRODUCTS */
+
+$sql = "SELECT * FROM products";
 
 $result = $conn->query($sql);
 
-$orders = [];
+$products = [];
+
+/* STORE PRODUCTS */
 
 while($row = $result->fetch_assoc()){
 
-    $orders[] = $row;
+    $products[] = $row;
 
 }
 
-echo json_encode($orders);
+/* RETURN JSON */
+
+echo json_encode($products);
 
 ?>

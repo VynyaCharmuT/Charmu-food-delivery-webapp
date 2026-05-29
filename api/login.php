@@ -2,52 +2,91 @@
 
 session_start();
 
+header("Access-Control-Allow-Origin: *");
+
+header("Access-Control-Allow-Headers: Content-Type");
+
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
+header("Content-Type: application/json");
+
 include '../includes/db.php';
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+$data = json_decode(file_get_contents("php://input"));
 
-$sql = "SELECT * FROM users WHERE email='$email'";
+if(!$data){
+    echo json_encode([
+        "success" => false,
+        "message" => "No Data Received"
+    ]);
+    exit;
+}
+
+$email = $data->email ?? '';
+$password = $data->password ?? '';
+$role = $data->role ?? '';
+
+$sql = "SELECT * FROM users
+        WHERE email='$email'
+        AND role='$role'";
 
 $result = $conn->query($sql);
 
-if($result->num_rows > 0) {
+if($result->num_rows > 0){
 
     $user = $result->fetch_assoc();
 
-    if(password_verify($password, $user['password'])) {
+    if(password_verify($password, $user['password'])){
 
         $_SESSION['user_id'] = $user['id'];
+
         $_SESSION['role'] = $user['role'];
+
         $_SESSION['name'] = $user['name'];
 
-        if($user['role'] == 'admin') {
+        echo json_encode([
 
-            header("Location: ../admin/dashboard.php");
+            "success" => true,
 
-        }
+            "user" => [
 
-        elseif($user['role'] == 'delivery') {
+                "id" => $user['id'],
 
-            header("Location: ../delivery/dashboard.php");
+                "name" => $user['name'],
 
-        }
+                "email" => $user['email'],
 
-        else {
+                "role" => $user['role']
 
-            header("Location: ../user/home.php");
+            ]
 
-        }
-
-    } else {
-
-        echo "Invalid Password";
+        ]);
 
     }
 
-} else {
+    else{
 
-    echo "User Not Found";
+        echo json_encode([
+
+            "success" => false,
+
+            "message" => "Invalid Password"
+
+        ]);
+
+    }
+
+}
+
+else{
+
+    echo json_encode([
+
+        "success" => false,
+
+        "message" => "User Not Found"
+
+    ]);
 
 }
 

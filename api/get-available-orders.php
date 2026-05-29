@@ -2,11 +2,19 @@
 
 header("Access-Control-Allow-Origin: *");
 
-header("Content-Type: application/json");
-
 include '../includes/db.php';
 
-$sql = "SELECT * FROM orders ORDER BY id DESC";
+$sql = "
+
+SELECT *
+
+FROM orders
+
+WHERE delivery_agent_id IS NULL
+
+ORDER BY id DESC
+
+";
 
 $result = $conn->query($sql);
 
@@ -19,5 +27,3 @@ while($row = $result->fetch_assoc()){
 }
 
 echo json_encode($orders);
-
-?>

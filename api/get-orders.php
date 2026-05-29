@@ -6,7 +6,13 @@ header("Content-Type: application/json");
 
 include '../includes/db.php';
 
-$sql = "SELECT * FROM orders ORDER BY id DESC";
+$user_id = $_GET['user_id'];
+
+$sql = "SELECT * FROM orders
+
+WHERE user_id='$user_id'
+
+ORDER BY id DESC";
 
 $result = $conn->query($sql);
 

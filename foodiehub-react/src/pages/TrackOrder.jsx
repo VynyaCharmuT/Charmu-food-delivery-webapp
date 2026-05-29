@@ -56,115 +56,89 @@ function TrackOrder(){
 
             <Navbar />
 
-            <div className="container mt-5">
+            <div className="mt-5">
 
-                <div className="card shadow border-0 p-5">
+    <div className="mb-4">
+        ✅ Order Placed
+    </div>
 
-                    <h1 className="mb-4">
+    <div className="mb-4">
 
-                        Track Order #{order.id}
+        {
+            [
+                'Assigned To Delivery Agent',
+                'Picked Up',
+                'On The Way',
+                'Delivered'
+            ].includes(order.tracking_status)
 
-                    </h1>
+            ?
 
-                    <h3 className="mb-4">
+            '✅ Assigned To Delivery Agent'
 
-                        Current Status:
-                        {' '}
-                        {order.tracking_status}
+            :
 
-                    </h3>
+            '⭕ Assigned To Delivery Agent'
+        }
 
-                    <div className="mt-5">
+    </div>
 
-                        <div className="mb-4">
+    <div className="mb-4">
 
-                            ✅ Order Placed
+        {
+            [
+                'Picked Up',
+                'On The Way',
+                'Delivered'
+            ].includes(order.tracking_status)
 
-                        </div>
+            ?
 
-                        <div className="mb-4">
+            '✅ Picked Up'
 
-                            {
+            :
 
-                                ['Accepted','Preparing','Out For Delivery','Delivered']
+            '⭕ Picked Up'
+        }
 
-                                .includes(order.tracking_status)
+    </div>
 
-                                ?
+    <div className="mb-4">
 
-                                '✅ Accepted'
+        {
+            [
+                'On The Way',
+                'Delivered'
+            ].includes(order.tracking_status)
 
-                                :
+            ?
 
-                                '⭕ Accepted'
+            '✅ On The Way'
 
-                            }
+            :
 
-                        </div>
+            '⭕ On The Way'
+        }
 
-                        <div className="mb-4">
+    </div>
 
-                            {
+    <div className="mb-4">
 
-                                ['Preparing','Out For Delivery','Delivered']
+        {
+            order.tracking_status === 'Delivered'
 
-                                .includes(order.tracking_status)
+            ?
 
-                                ?
+            '✅ Delivered'
 
-                                '✅ Preparing'
+            :
 
-                                :
+            '⭕ Delivered'
+        }
 
-                                '⭕ Preparing'
+    </div>
 
-                            }
-
-                        </div>
-
-                        <div className="mb-4">
-
-                            {
-
-                                ['Out For Delivery','Delivered']
-
-                                .includes(order.tracking_status)
-
-                                ?
-
-                                '✅ Out For Delivery'
-
-                                :
-
-                                '⭕ Out For Delivery'
-
-                            }
-
-                        </div>
-
-                        <div className="mb-4">
-
-                            {
-
-                                order.tracking_status === 'Delivered'
-
-                                ?
-
-                                '✅ Delivered'
-
-                                :
-
-                                '⭕ Delivered'
-
-                            }
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
+</div>
 
         </div>
 

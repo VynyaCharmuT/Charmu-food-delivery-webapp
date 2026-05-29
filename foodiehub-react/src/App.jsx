@@ -12,6 +12,7 @@ import Checkout from './pages/Checkout';
 import AdminOrders from './pages/AdminOrders';
 import AdminProducts from './pages/AdminProducts';
 import AddProduct from './admin/AddProduct';
+import AdminDashboard from './pages/AdminDashboard';
 import DeliveryDashboard from './pages/DeliveryDashboard';
 
 function App(){
@@ -24,11 +25,11 @@ function App(){
 
         <Route path="/" element={<Home />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/orders" element={<Orders />} />
         <Route path="/track/:id" element={<TrackOrder />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/products" element={<AdminProducts />} />
         <Route path="/admin/add-product" element={<AddProduct />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
 <Route
 

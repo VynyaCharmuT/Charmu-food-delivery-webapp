@@ -14,6 +14,8 @@ import AdminProducts from './pages/AdminProducts';
 import AddProduct from './admin/AddProduct';
 import AdminDashboard from './pages/AdminDashboard';
 import DeliveryDashboard from './pages/DeliveryDashboard';
+import AdminPayments from './pages/AdminPayments';
+import AdminCoupons from './pages/AdminCoupons';
 
 function App(){
 
@@ -31,6 +33,8 @@ function App(){
         <Route path="/admin/add-product" element={<AddProduct />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
+        <Route path="/admin/payments" element={<AdminPayments />} />
+        <Route path="/admin/coupons" element={<AdminCoupons />} />
 <Route
 
 path="/cart"

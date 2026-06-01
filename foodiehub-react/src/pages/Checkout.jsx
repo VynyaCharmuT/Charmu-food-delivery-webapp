@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -18,11 +18,65 @@ function Checkout(){
 
     const [paymentMethod, setPaymentMethod] = useState('COD');
 
+    const [couponCode, setCouponCode] = useState('');
+    
+    const [discount, setDiscount] = useState(0);
+
+    const [coupons,setCoupons] = useState([]);
+    
+    const [selectedCoupon,setSelectedCoupon] = useState(null);
+
     const user = JSON.parse(
 
         localStorage.getItem('user')
 
     );
+
+    useEffect(() => {
+
+    fetch(
+        'http://localhost/food-app/api/get-coupons.php'
+    )
+    .then(res => res.json())
+    .then(data => {
+
+        console.log(data);
+
+        setCoupons(data);
+
+    });
+
+}, []);
+
+    const applyCoupon = async() => {
+
+    const response = await fetch(
+
+        `http://localhost/food-app/api/apply-coupon.php?code=${couponCode}`
+
+    );
+
+    const data = await response.json();
+
+    if(data.error){
+
+        alert(data.error);
+
+        return;
+
+    }
+
+    const discountAmount =
+
+        (grandTotal * data.discount_percentage) / 100;
+
+    setDiscount(discountAmount);
+
+    alert(
+        `Coupon Applied! ${data.discount_percentage}% OFF`
+    );
+
+};
 
     const placeOrder = async () => {
         if(!address || !phone){
@@ -31,7 +85,7 @@ function Checkout(){
 
     return;
 
-}
+        }
 
     try{
 
@@ -174,12 +228,152 @@ function Checkout(){
 
                             </select>
 
-                            <h3 className="mb-4">
+                            <h5 className="mb-3">
+🎁 Available Coupons
+</h5>
 
-                                Grand Total:
-                                ₹{grandTotal}
+{
+coupons.map(coupon => {
 
-                            </h3>
+    const unlocked =
+    grandTotal >= coupon.minimum_order;
+
+    return(
+
+        <div
+        key={coupon.id}
+        className="card p-3 mb-2"
+        >
+
+            <h6>
+                {coupon.code}
+            </h6>
+
+            <p>
+                {coupon.discount_percentage}% OFF
+            </p>
+
+            <p>
+                Min Order ₹{coupon.minimum_order}
+            </p>
+
+            {
+
+            unlocked
+
+            ?
+
+            <button
+
+            className="btn btn-success btn-sm"
+
+            onClick={() => {
+
+                setCouponCode(
+                    coupon.code
+                );
+
+            }}
+
+            >
+
+                Apply Coupon
+
+            </button>
+
+            :
+
+            <button
+
+            className="btn btn-secondary btn-sm"
+
+            disabled
+
+            >
+
+                Add ₹{
+                    coupon.minimum_order
+                    -
+                    grandTotal
+                } more to unlock
+
+            </button>
+
+            }
+
+        </div>
+
+    );
+
+})
+}
+
+                            <h5 className="mb-3">
+
+🎁 Available Coupons
+
+</h5>
+
+                            <input
+
+type="text"
+
+className="form-control mb-3"
+
+placeholder="Enter Coupon Code"
+
+value={couponCode}
+
+onChange={(e)=>
+setCouponCode(e.target.value)
+}
+
+/>
+
+<button
+
+className="btn btn-info w-100 mb-3"
+
+onClick={applyCoupon}
+
+>
+
+Apply Coupon
+
+</button>
+
+                            <h5>
+
+Subtotal:
+₹{grandTotal}
+
+</h5>
+
+<h5>
+
+Discount:
+₹{discount}
+
+</h5>
+
+{
+discount > 0 && (
+
+<p className="text-success fw-bold">
+
+🎉 You Saved ₹{discount}
+
+</p>
+
+)
+}
+
+<h3 className="mb-4 text-success">
+
+Final Total:
+₹{grandTotal - discount}
+
+</h3>
 
                             <button
 

@@ -13,7 +13,7 @@ $data = json_decode(
 
 $order_id = $data['order_id'];
 $user_id = $data['user_id'];
-$product_id = $data['product_id'];
+$product_id = $data['product_id'] ?? 0;
 $rating = $data['rating'];
 $review = $data['review'];
 

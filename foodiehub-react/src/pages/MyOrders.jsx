@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import { useNavigate } from "react-router-dom";
+
 function MyOrders(){
 
     const [orders,setOrders] = useState([]);
+    const navigate = useNavigate();
 
     const user = JSON.parse(
         localStorage.getItem('user')
@@ -54,52 +57,39 @@ function MyOrders(){
 
                     <p>
 
-                        Total:
-                        ₹{order.total_amount}
+    Total:
+    ₹{order.total_amount}
 
-                    </p>
+</p>
 
-                   <div className="d-flex gap-2">
+                    <div className="d-flex gap-2">
 
     <a
-    href={`/order-details/${order.id}`}
-    className="btn btn-dark"
+        href={`/track/${order.id}`}
+        className="btn btn-primary"
+    >
+        Track Order
+    </a>
+
+    <a
+        href={`/order-details/${order.id}`}
+        className="btn btn-dark"
     >
         View Details
     </a>
 
-    <div className="d-flex gap-2">
-
-    <a
-    href={`/order-details/${order.id}`}
-    className="btn btn-dark"
-    >
-        View Details
-    </a>
-
-    <div className="d-flex gap-2">
-
-<a
-href={`/track/${order.id}`}
-className="btn btn-primary"
->
-
-Track Order
-
-</a>
-
-<a
-href={`/order-details/${order.id}`}
-className="btn btn-dark"
->
-
-View Details
-
-</a>
-
-</div>
-
-</div>
+    {
+        order.tracking_status === "Delivered" && (
+            <button
+                className="btn btn-warning"
+                onClick={() =>
+                    navigate(`/add-review/${order.id}`)
+                }
+            >
+                ⭐ Rate Order
+            </button>
+        )
+    }
 
 </div>
 

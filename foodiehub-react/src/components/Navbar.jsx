@@ -1,8 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { CartContext } from '../context/CartContext';
 
 function Navbar(){
 
     const navigate = useNavigate();
+
+    const { cart, grandTotal } = useContext(CartContext);
+
+    const [showMiniCart, setShowMiniCart] = useState(false);
 
     const user = JSON.parse(
 
@@ -26,17 +32,27 @@ function Navbar(){
 
             <div className="container">
 
-                <Link
+                <button
 
-                className="navbar-brand fw-bold text-warning fs-1"
+className="btn btn-outline-warning me-3"
 
-                to="/"
+onClick={() =>
+setShowMiniCart(!showMiniCart)
+}
 
-                >
+>
 
-                    FoodieHub
+Cart (
 
-                </Link>
+{cart.reduce(
+(total,item)=>
+total + item.quantity,
+0
+)}
+
+)
+
+</button>
 
                 <button
 
@@ -193,6 +209,103 @@ function Navbar(){
                 </div>
 
             </div>
+
+            {
+showMiniCart && (
+
+<div
+
+style={{
+position:'fixed',
+top:'0',
+right:'0',
+width:'350px',
+height:'100vh',
+background:'#fff',
+padding:'20px',
+boxShadow:'-5px 0 15px rgba(0,0,0,0.2)',
+zIndex:'9999',
+overflowY:'auto'
+}}
+
+>
+
+<h3>Your Cart</h3>
+
+<hr />
+
+{
+cart.length === 0
+?
+
+<p>Cart Empty</p>
+
+:
+
+<>
+{
+cart.map(item => (
+
+<div
+key={item.id}
+className="mb-3"
+>
+
+<h6>{item.name}</h6>
+
+<p>
+
+Qty:
+{item.quantity}
+
+</p>
+
+<p>
+
+₹{
+item.price *
+item.quantity
+}
+
+</p>
+
+<hr />
+
+</div>
+
+))
+}
+
+<h4>
+
+Total:
+₹{grandTotal}
+
+</h4>
+
+<Link
+
+to="/cart"
+
+className="btn btn-warning w-100"
+
+onClick={() =>
+setShowMiniCart(false)
+}
+
+>
+
+Go To Cart
+
+</Link>
+
+</>
+}
+
+</div>
+
+)
+}
 
         </nav>
 

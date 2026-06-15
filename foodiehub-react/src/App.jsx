@@ -16,6 +16,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import DeliveryDashboard from './pages/DeliveryDashboard';
 import AdminPayments from './pages/AdminPayments';
 import AdminCoupons from './pages/AdminCoupons';
+import AddReview from "./pages/AddReview";
 
 function App(){
 
@@ -35,6 +36,7 @@ function App(){
         <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
         <Route path="/admin/payments" element={<AdminPayments />} />
         <Route path="/admin/coupons" element={<AdminCoupons />} />
+        <Route path="/add-review/:orderId" element={<AddReview />} />
 <Route
 
 path="/cart"

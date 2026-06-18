@@ -12,25 +12,35 @@ function TrackOrder(){
 
     const [order, setOrder] = useState(null);
 
+    const [agent, setAgent] = useState(null);
+
     useEffect(() => {
 
-        fetch(
+fetch(
+`http://localhost/food-app/api/track-order.php?order_id=${id}`
+)
+.then(res => res.json())
+.then(data => {
 
-        `http://localhost/food-app/api/track-order.php?order_id=${id}`
+console.log(data);
 
-        )
+setOrder(data);
 
-        .then(res => res.json())
+});
 
-        .then(data => {
+fetch(
+`http://localhost/food-app/api/get-delivery-agent.php?order_id=${id}`
+)
+.then(res => res.json())
+.then(data => {
 
-            console.log(data);
+console.log(data);
 
-            setOrder(data);
+setAgent(data);
 
-        });
+});
 
-    }, [id]);
+}, [id]);
 
     if(!order){
 
@@ -136,16 +146,128 @@ function TrackOrder(){
 
 </div>
 
-<div className="mt-5">
+{
+agent && (
+
+<div
+className="card shadow p-3 mb-4"
+style={{
+background:"#fff",
+color:"#000",
+border:"3px solid red"
+}}
+>
+
+<h4>
+
+🚴 Delivery Partner
+
+</h4>
+
+<p>
+
+Name:
+{agent.name}
+
+</p>
+
+<p>
+
+Phone:
+{agent.phone}
+
+</p>
+
+<p>
+
+Vehicle:
+{agent.vehicle_number}
+
+</p>
+
+</div>
+
+)
+}
+
+<div className="card shadow-lg border-0 p-4 mb-4">
+
+<h3 className="mb-3">
+🧾 Order Details
+</h3>
+
+<hr />
+
+<p>
+<b>Order ID:</b> #{order.id}
+</p>
+
+<p>
+<b>Total Amount:</b> ₹{order.total_amount}
+</p>
+
+<p>
+<b>Payment Method:</b> {order.payment_method}
+</p>
+
+<p>
+<b>Payment Status:</b>
+
+<span
+className={`badge ms-2 ${
+order.payment_status === "Paid"
+? "bg-success"
+: "bg-warning text-dark"
+}`}
+>
+
+{order.payment_status}
+
+</span>
+
+</p>
+
+<p>
+
+<b>Current Status:</b>
+
+<span
+className={`badge ms-2 ${
+order.tracking_status === "Delivered"
+? "bg-success"
+: "bg-primary"
+}`}
+>
+
+{order.tracking_status}
+
+</span>
+
+</p>
+
+</div>
+
+<div className="container mt-5">
 
     <h3>
         Live Delivery Tracking
     </h3>
 
-    <p className="text-success">
+    <p>
 
-Current Status:
+<b>Status:</b>
+
+<span
+className={`badge ms-2 ${
+order.tracking_status === "Delivered"
+? "bg-success"
+: "bg-warning text-dark"
+}`}
+>
+
 {order.tracking_status}
+
+</span>
 
 </p>
 

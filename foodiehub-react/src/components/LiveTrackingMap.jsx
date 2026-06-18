@@ -36,11 +36,11 @@ iconAnchor:[12,41]
 
 const deliveryIcon = new L.Icon({
 iconUrl:
-"https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+"https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png",
 shadowUrl:
 "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-iconSize:[25,41],
-iconAnchor:[12,41]
+iconSize:[40,60],
+iconAnchor:[20,60]
 });
 
 function LiveTrackingMap({ orderId }) {
@@ -65,6 +65,8 @@ const customerRes = await fetch(
 const customerData =
 await customerRes.json();
 
+console.log("CUSTOMER DATA:", customerData);
+
 if (
 customerData?.latitude &&
 customerData?.longitude
@@ -83,6 +85,8 @@ const deliveryRes = await fetch(
 
 const deliveryData =
 await deliveryRes.json();
+
+console.log("DELIVERY DATA:", deliveryData);
 
 if (
 deliveryData?.latitude &&
@@ -185,10 +189,12 @@ return <p>Loading Map...</p>;
 
 }
 
+console.log("CUSTOMER LOCATION:", customerLocation);
+
 return(
 
 <div>
-
+    
 {
 distance && (
 
@@ -204,30 +210,90 @@ className="card p-3 mb-3 shadow"
 <h5>
 ⏱ ETA:
 {
-Math.ceil(distance * 4)
+Math.ceil(Number(distance) * 4)
 }
  mins
 </h5>
+
+{
+Number(distance) === 0 && (
+
+<div className="alert alert-success mt-3 mb-0">
+
+🚴 Delivery Partner has reached your location
 
 </div>
 
 )
 }
 
+</div>
+
+)
+}
+
+<p>
+Customer:
+{customerLocation?.[0]},
+{customerLocation?.[1]}
+</p>
+
+<p>
+Delivery:
+{deliveryLocation?.[0]},
+{deliveryLocation?.[1]}
+</p>
+
 <MapContainer
-
 center={customerLocation}
-
 zoom={15}
-
 style={{
 height:"500px",
 width:"100%"
 }}
-
 >
 
-...
+<TileLayer
+url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+/>
+
+<Marker position={customerLocation}>
+
+<Popup>
+Customer
+</Popup>
+
+</Marker>
+
+{
+deliveryLocation && (
+
+<Marker
+position={deliveryLocation}
+icon={deliveryIcon}
+>
+
+<Popup>
+Delivery Agent
+</Popup>
+
+</Marker>
+
+)
+}
+
+{
+deliveryLocation && (
+
+<Polyline
+positions={[
+deliveryLocation,
+customerLocation
+]}
+/>
+
+)
+}
 
 </MapContainer>
 

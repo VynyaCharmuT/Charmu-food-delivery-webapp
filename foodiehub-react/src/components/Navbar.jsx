@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 
 function Navbar(){
@@ -15,6 +15,48 @@ function Navbar(){
         localStorage.getItem('user')
 
     );
+
+    const [notifications,setNotifications] = useState([]);
+    const [showNotifications,setShowNotifications] = useState(false);
+
+    useEffect(() => {
+
+if(user){
+
+fetch(
+`http://localhost/food-app/api/get-notifications.php?user_id=${user.id}`
+)
+.then(res => res.json())
+.then(data => {
+
+setNotifications(data);
+
+});
+
+}
+
+const interval = setInterval(() => {
+
+if(user){
+
+fetch(
+`http://localhost/food-app/api/get-notifications.php?user_id=${user.id}`
+)
+.then(res => res.json())
+.then(data => {
+
+setNotifications(data);
+
+});
+
+}
+
+},10000);
+
+return () => clearInterval(interval);
+
+}, [user]);
+
 
     const handleLogout = () => {
 
@@ -145,6 +187,105 @@ total + item.quantity,
                                     </span>
 
                                 </li>
+
+                                <li className="nav-item me-2 position-relative">
+
+<button
+className="btn btn-outline-danger position-relative"
+onClick={() =>
+setShowNotifications(
+!showNotifications
+)
+}
+>
+
+🔔
+
+{
+notifications.length > 0 && (
+
+<span
+className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+>
+
+{notifications.length}
+
+</span>
+
+)
+}
+
+</button>
+
+{
+showNotifications && (
+
+<div
+className="card shadow position-absolute"
+style={{
+right:"0",
+top:"50px",
+width:"350px",
+maxHeight:"400px",
+overflowY:"auto",
+zIndex:"9999"
+}}
+>
+
+<div className="card-body">
+
+<h5>
+
+Notifications
+
+</h5>
+
+<hr />
+
+{
+notifications.length === 0
+?
+
+<p>No Notifications</p>
+
+:
+
+notifications.map(notification => (
+
+<div
+key={notification.id}
+className="mb-3"
+>
+
+<p className="mb-1">
+
+{notification.message}
+
+</p>
+
+<small
+className="text-muted"
+>
+
+{notification.created_at}
+
+</small>
+
+<hr />
+
+</div>
+
+))
+}
+
+</div>
+
+</div>
+
+)
+}
+
+</li>
 
                                 <li className="nav-item">
 

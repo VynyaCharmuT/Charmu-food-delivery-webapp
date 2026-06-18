@@ -1,7 +1,9 @@
 <?php
-
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET");
 header("Content-Type: application/json");
+
 
 include '../includes/db.php';
 
@@ -9,27 +11,22 @@ $order_id = $_GET['order_id'];
 
 $sql = "
 
-SELECT *
+SELECT
+u.name,
+u.phone,
+u.vehicle_number
 
-FROM delivery_locations
+FROM orders o
 
-WHERE order_id='$order_id'
+JOIN users u
+ON o.delivery_agent_id = u.id
 
-LIMIT 1
+WHERE o.id='$order_id'
 
 ";
 
 $result = $conn->query($sql);
 
-if($result->num_rows > 0){
-
 echo json_encode(
 $result->fetch_assoc()
 );
-
-}
-else{
-
-echo json_encode(null);
-
-}

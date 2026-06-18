@@ -84,22 +84,32 @@ function Orders(){
 
                                 <p>
 
-                                    Tracking:
-                                    {order.tracking_status}
+    Tracking:
+    {order.tracking_status}
 
-                                </p>
+</p>
 
-                                <Link
+                                <div className="d-flex gap-2">
 
-                                to={`/track/${order.id}`}
+    <Link
+        to={`/track/${order.id}`}
+        className="btn btn-warning"
+    >
+        Track Order
+    </Link>
 
-                                className="btn btn-warning"
+    {
+        order.tracking_status === "Delivered" && (
+            <Link
+                to={`/add-review/${order.id}`}
+                className="btn btn-success"
+            >
+                ⭐ Rate Order
+            </Link>
+        )
+    }
 
-                                >
-
-                                    Track Order
-
-                                </Link>
+</div>
 
                             </div>
 

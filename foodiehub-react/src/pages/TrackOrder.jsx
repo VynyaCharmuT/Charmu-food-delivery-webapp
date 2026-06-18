@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 
 import Navbar from '../components/Navbar';
 
+import LiveTrackingMap from "../components/LiveTrackingMap";
+
 function TrackOrder(){
 
     const { id } = useParams();
@@ -124,23 +126,36 @@ function TrackOrder(){
 
     <div className="mb-4">
 
-        {
-            order.tracking_status === 'Delivered'
-
-            ?
-
-            '✅ Delivered'
-
-            :
-
-            '⭕ Delivered'
-        }
-
-    </div>
+    {
+        order.tracking_status === 'Delivered'
+        ?
+        '✅ Delivered'
+        :
+        '⭕ Delivered'
+    }
 
 </div>
 
-        </div>
+<div className="mt-5">
+
+    <h3>
+        Live Delivery Tracking
+    </h3>
+
+    <p className="text-success">
+
+Current Status:
+{order.tracking_status}
+
+</p>
+
+    <LiveTrackingMap orderId={id} />
+
+</div>
+
+</div>
+
+</div>
 
     )
 

@@ -34,7 +34,7 @@ const AddReview = () => {
 
         if(data.success){
             alert("Review Submitted");
-            navigate("/my-orders");
+            navigate("/orders");
         }
         else{
             alert(data.message);

@@ -26,11 +26,55 @@ function Checkout(){
     
     const [selectedCoupon,setSelectedCoupon] = useState(null);
 
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+    const [latitude,setLatitude] = useState(null);
+    
+    const [longitude,setLongitude] = useState(null);
+
+    const [persons,setPersons] = useState(1);
+
+    const [sauceQuantity,setSauceQuantity] = useState(0);
+
+    const [beverageType,setBeverageType] = useState("Water");
+
+    const [beverageQuantity,setBeverageQuantity] = useState(1);
+
+    const [sideType,setSideType] = useState("None");
+
+    const [sideQuantity,setSideQuantity] = useState(0);
+
     const user = JSON.parse(
 
         localStorage.getItem('user')
 
     );
+
+    const freeSauces = persons * 2;
+
+const extraSauces =
+Math.max(
+0,
+sauceQuantity - freeSauces
+);
+
+const sauceCharge =
+extraSauces * 2;
+
+const beverageCharge =
+beverageType === "Water"
+?
+0
+:
+beverageQuantity * 20;
+
+const sideCharge =
+sideQuantity * 30;
+
+const addonTotal =
+sauceCharge +
+beverageCharge +
+sideCharge;
 
     useEffect(() => {
 
@@ -46,7 +90,46 @@ function Checkout(){
 
     });
 
+navigator.geolocation.getCurrentPosition(
+
+(position)=>{
+
+setLatitude(position.coords.latitude);
+
+setLongitude(position.coords.longitude);
+
+}
+
+);
+
 }, []);
+
+
+// ADD THIS ENTIRE BLOCK HERE
+
+useEffect(()=>{
+
+if(latitude && longitude){
+
+fetch(
+`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.display_name){
+
+setAddress(data.display_name);
+
+}
+
+});
+
+}
+
+},[latitude,longitude]);
 
     const applyCoupon = async() => {
 
@@ -67,8 +150,8 @@ function Checkout(){
     }
 
     const discountAmount =
-
-        (grandTotal * data.discount_percentage) / 100;
+((grandTotal + addonTotal) *
+data.discount_percentage) / 100;
 
     setDiscount(discountAmount);
 
@@ -79,13 +162,18 @@ function Checkout(){
 };
 
     const placeOrder = async () => {
+        if(isPlacingOrder) return;
+
+setIsPlacingOrder(true);
         if(!address || !phone){
 
     alert("Please fill all details");
 
+    setIsPlacingOrder(false);
+
     return;
 
-        }
+}
 
     try{
 
@@ -107,14 +195,22 @@ function Checkout(){
 
             body: JSON.stringify({
 
-                user_id:user.id,
-                total_amount:grandTotal,
-                payment_method:paymentMethod,
-                address,
-                phone,
-                cart
+user_id:user.id,
+total_amount: grandTotal + addonTotal - discount,
+payment_method:paymentMethod,
+address,
+phone,
+latitude,
+longitude,
+persons,
+sauceQuantity,
+beverageType,
+beverageQuantity,
+sideType,
+sideQuantity,
+cart
 
-            })
+})
 
         });
 
@@ -131,6 +227,8 @@ function Checkout(){
         alert(data.message);
 
         setCart([]);
+        
+        setIsPlacingOrder(false);
 
         navigate('/orders');
 
@@ -139,6 +237,9 @@ function Checkout(){
     catch(error){
 
         console.log("FULL ERROR:", error);
+
+        setIsPlacingOrder(false);
+        alert("An error occurred while placing the order. Please try again.");
 
     }
 
@@ -165,20 +266,12 @@ function Checkout(){
                             </h2>
 
                             <input
-
-                            type="text"
-
-                            className="form-control mb-3"
-
-                            placeholder="Delivery Address"
-
-                            onChange={(e)=>
-
-                            setAddress(e.target.value)
-
-                            }
-
-                            />
+type="text"
+className="form-control mb-3"
+placeholder="Delivery Address"
+value={address}
+onChange={(e)=>setAddress(e.target.value)}
+/>
 
                             <input
 
@@ -227,6 +320,84 @@ function Checkout(){
                                 </option>
 
                             </select>
+
+                            <h4 className="mb-3">
+
+Add-ons
+
+</h4>
+
+<label>Serving Size</label>
+
+<select
+className="form-control mb-3"
+value={persons}
+onChange={(e)=>setPersons(Number(e.target.value))}
+>
+<option value="1">1 Person</option>
+<option value="2">2 Persons</option>
+<option value="3">3 Persons</option>
+<option value="4">4 Persons</option>
+</select>
+
+<label>Sauce Packets</label>
+
+<input
+type="number"
+min="0"
+className="form-control mb-3"
+value={sauceQuantity}
+onChange={(e)=>setSauceQuantity(Number(e.target.value))}
+/>
+
+<label>Beverage</label>
+
+<select
+className="form-control mb-3"
+value={beverageType}
+onChange={(e)=>setBeverageType(e.target.value)}
+>
+<option>Water</option>
+<option>Coke</option>
+<option>Pepsi</option>
+<option>Sprite</option>
+<option>Fanta</option>
+<option>Thums Up</option>
+</select>
+
+<label>Beverage Quantity</label>
+
+<input
+type="number"
+min="0"
+className="form-control mb-3"
+value={beverageQuantity}
+onChange={(e)=>setBeverageQuantity(Number(e.target.value))}
+/>
+
+<label>Side Dish</label>
+
+<select
+className="form-control mb-3"
+value={sideType}
+onChange={(e)=>setSideType(e.target.value)}
+>
+<option>None</option>
+<option>French Fries</option>
+<option>Garlic Bread</option>
+<option>Chicken Nuggets</option>
+<option>Onion Rings</option>
+</select>
+
+<label>Side Quantity</label>
+
+<input
+type="number"
+min="0"
+className="form-control mb-4"
+value={sideQuantity}
+onChange={(e)=>setSideQuantity(Number(e.target.value))}
+/>
 
                             <h5 className="mb-3">
 🎁 Available Coupons
@@ -308,13 +479,8 @@ coupons.map(coupon => {
 })
 }
 
-                            <h5 className="mb-3">
-
-🎁 Available Coupons
-
-</h5>
-
-                            <input
+                           
+<input
 
 type="text"
 
@@ -350,6 +516,18 @@ Subtotal:
 </h5>
 
 <h5>
+Add-ons:
+₹{addonTotal}
+</h5>
+
+<p className="text-muted">
+
+Free Sauces:
+{freeSauces}
+
+</p>
+
+<h5>
 
 Discount:
 ₹{discount}
@@ -371,21 +549,27 @@ discount > 0 && (
 <h3 className="mb-4 text-success">
 
 Final Total:
-₹{grandTotal - discount}
+₹{
+grandTotal
++
+addonTotal
+-
+discount
+}
 
 </h3>
 
                             <button
-
-                            className="btn btn-warning w-100"
-
-                            onClick={placeOrder}
-
-                            >
-
-                                Place Order
-
-                            </button>
+    className="btn btn-warning w-100"
+    onClick={placeOrder}
+    disabled={isPlacingOrder}
+>
+    {
+        isPlacingOrder
+        ? "Placing Order..."
+        : "Place Order"
+    }
+</button>
 
                         </div>
 

@@ -17,9 +17,45 @@ $total_amount = $data->total_amount;
 $payment_method = $data->payment_method;
 $address = $data->address;
 $phone = $data->phone;
+$latitude = $data->latitude;
+$longitude = $data->longitude;
 $cart = $data->cart;
+$persons = $data->persons;
+$sauceQuantity = $data->sauceQuantity;
+$beverageType = $data->beverageType;
+$beverageQuantity = $data->beverageQuantity;
+$sideType = $data->sideType;
+$sideQuantity = $data->sideQuantity;
 
 /* INSERT ORDER */
+
+$freeSauces = $persons * 2;
+
+$extraSauces = max(
+0,
+$sauceQuantity - $freeSauces
+);
+
+$sauceCharge = $extraSauces * 2;
+
+$beverageCharge =
+($beverageType == "Water")
+?
+0
+:
+($beverageQuantity * 20);
+
+$sideCharge =
+($sideType == "None")
+?
+0
+:
+($sideQuantity * 30);
+
+$addonCharges =
+$sauceCharge +
+$beverageCharge +
+$sideCharge;
 
 $sql = "INSERT INTO orders(
 
@@ -29,8 +65,17 @@ payment_method,
 payment_status,
 order_status,
 tracking_status,
+cutlery_persons,
+sauce_type,
+sauce_quantity,
+beverage_type,
+beverage_quantity,
+side_type,
+addon_charges,
 address,
-phone
+phone,
+latitude,
+longitude
 
 )
 
@@ -42,8 +87,17 @@ VALUES(
 'Pending',
 'Order Placed',
 'Order Placed',
+'$persons',
+'Tomato Sauce',
+'$sauceQuantity',
+'$beverageType',
+'$beverageQuantity',
+'$sideType',
+'$addonCharges',
 '$address',
-'$phone'
+'$phone',
+'$latitude',
+'$longitude'
 
 )";
 

@@ -12,7 +12,7 @@ function TrackOrder(){
 
     const [order, setOrder] = useState(null);
 
-    const [agent, setAgent] = useState(null);
+    const [orderItems,setOrderItems] = useState([]);
 
     useEffect(() => {
 
@@ -37,6 +37,18 @@ fetch(
 console.log(data);
 
 setAgent(data);
+
+fetch(
+`http://localhost/food-app/api/get-order-items.php?order_id=${id}`
+)
+.then(res => res.json())
+.then(data => {
+
+console.log(data);
+
+setOrderItems(data);
+
+});
 
 });
 
@@ -244,6 +256,47 @@ order.tracking_status === "Delivered"
 </span>
 
 </p>
+
+</div>
+
+<div className="card shadow p-4 mb-4">
+
+<h4 className="mb-3">
+
+🍔 Ordered Items
+
+</h4>
+
+{
+orderItems.map((item,index)=>(
+
+<div
+key={index}
+className="d-flex justify-content-between border-bottom py-2"
+>
+
+<div>
+
+<b>{item.name}</b>
+
+<br/>
+
+Qty: {item.quantity}
+
+</div>
+
+<div>
+
+₹{
+item.price * item.quantity
+}
+
+</div>
+
+</div>
+
+))
+}
 
 </div>
 

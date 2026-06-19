@@ -1,53 +1,31 @@
-if($conn->query($sql)){
+<?php
 
-$getUser = $conn->query("
-SELECT user_id
-FROM orders
-WHERE id='$order_id'
-");
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
 
-$user = $getUser->fetch_assoc();
+include '../includes/db.php';
 
-$user_id = $user['user_id'];
+$user_id = $_GET['user_id'];
 
-$message = "";
+$sql = "
 
-if($status == "Picked Up"){
+SELECT *
+FROM notifications
+WHERE user_id='$user_id'
+ORDER BY created_at DESC
 
-$message =
-"📦 Your order has been picked up by the delivery partner.";
+";
 
-}
-else if($status == "On The Way"){
+$result = $conn->query($sql);
 
-$message =
-"🚚 Your order is on the way.";
+$notifications = [];
 
-}
-else if($status == "Delivered"){
+while($row = $result->fetch_assoc()){
 
-$message =
-"✅ Your order has been delivered successfully.";
+    $notifications[] = $row;
 
 }
 
-if($message != ""){
+echo json_encode($notifications);
 
-$conn->query("
-INSERT INTO notifications(
-user_id,
-message
-)
-VALUES(
-'$user_id',
-'$message'
-)
-");
-
-}
-
-echo json_encode([
-"success"=>true
-]);
-
-}
+?>

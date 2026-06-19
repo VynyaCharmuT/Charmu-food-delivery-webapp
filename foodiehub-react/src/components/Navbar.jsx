@@ -70,7 +70,7 @@ return () => clearInterval(interval);
 
     return(
 
-        <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+        <nav className="navbar navbar-expand-lg premium-navbar py-3">
 
             <div className="container">
 
@@ -126,7 +126,7 @@ total + item.quantity,
 
                             <Link
 
-                            className="nav-link"
+                            className="nav-link premium-link"
 
                             to="/"
 
@@ -142,7 +142,7 @@ total + item.quantity,
 
                             <Link
 
-                            className="nav-link"
+                            className="nav-link premium-link"
 
                             to="/cart"
 
@@ -158,7 +158,7 @@ total + item.quantity,
 
                             <Link
 
-                            className="nav-link"
+                            className="nav-link premium-link"
 
                             to="/orders"
 
@@ -199,7 +199,9 @@ setShowNotifications(
 }
 >
 
+<span className="bell">
 🔔
+</span>
 
 {
 notifications.length > 0 && (
@@ -291,7 +293,7 @@ className="text-muted"
 
                                     <button
 
-                                    className="btn btn-warning ms-2"
+                                    className="btn premium-logout ms-2"
 
                                     onClick={handleLogout}
 
@@ -313,7 +315,7 @@ className="text-muted"
 
                                     <Link
 
-                                    className="nav-link"
+                                    className="nav-link premium-link"
 
                                     to="/login"
 
@@ -329,7 +331,7 @@ className="text-muted"
 
                                     <Link
 
-                                    className="nav-link"
+                                    className="nav-link premium-link"
 
                                     to="/register"
 
@@ -362,7 +364,9 @@ top:'0',
 right:'0',
 width:'350px',
 height:'100vh',
-background:'#fff',
+background:'#1E1E1E',
+color:'#fff',
+borderLeft:'1px solid rgba(244,180,0,.3)',
 padding:'20px',
 boxShadow:'-5px 0 15px rgba(0,0,0,0.2)',
 zIndex:'9999',

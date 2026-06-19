@@ -89,7 +89,7 @@ function Orders(){
 
 </p>
 
-                                <div className="d-flex gap-2">
+                                <div className="d-flex gap-2 flex-wrap">
 
     <Link
         to={`/track/${order.id}`}
@@ -97,6 +97,18 @@ function Orders(){
     >
         Track Order
     </Link>
+
+    <button
+        className="btn btn-dark"
+        onClick={() =>
+            window.open(
+                `http://localhost/food-app/api/generate-invoice.php?order_id=${order.id}`,
+                "_blank"
+            )
+        }
+    >
+        📄 Invoice
+    </button>
 
     {
         order.tracking_status === "Delivered" && (

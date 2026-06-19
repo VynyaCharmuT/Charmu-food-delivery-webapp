@@ -56,11 +56,27 @@ const [category, setCategory] = useState('All');
 
             <div className="container mt-5">
 
-                <h1 className="mb-4">
+                <div className="hero text-center p-5 mb-5">
 
-                    Recommended Foods
+<h1 className="display-3 fw-bold">
 
-                </h1>
+🍔 FoodieHub
+
+</h1>
+
+<p className="lead text-light">
+
+Premium Food Delivery Experience
+
+</p>
+
+<button className="btn btn-warning btn-lg mt-3">
+
+Order Now
+
+</button>
+
+</div>
 
                 <div className="row mb-4">
 
@@ -70,7 +86,7 @@ const [category, setCategory] = useState('All');
 
         type="text"
 
-        className="form-control"
+        className="form-control premium-search"
 
         placeholder="Search foods..."
 
@@ -90,7 +106,7 @@ const [category, setCategory] = useState('All');
 
         <select
 
-        className="form-select"
+        className="form-select premium-search"
 
         value={category}
 

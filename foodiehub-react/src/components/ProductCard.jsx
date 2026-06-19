@@ -12,26 +12,28 @@ function ProductCard({ product }){
 
         <div className="col-md-4 mb-4">
 
-            <div className="card shadow border-0 h-100">
+            <div className="card shadow border-0 h-100 product-card">
 
                 <img
-                src={`http://localhost/food-app/assets/images/${product.image}`}
-                className="card-img-top"
-                style={{
-                    height:'250px',
-                    objectFit:'cover'
-                }}
-                />
+src={`http://localhost/food-app/assets/images/${product.image}`}
+className="card-img-top product-image"
+style={{
+    height:'250px',
+    objectFit:'cover'
+}}
+/>
 
                 <div className="card-body">
 
-                    <h3>
+                    {product.name}
 
-                        {product.name}
-
-                    </h3>
-
-                    <h4 className="text-warning">
+                    <h4
+className="text-warning fw-bold"
+style={{
+textShadow:
+"0 0 10px rgba(244,180,0,.6)"
+}}
+>
 
                         ₹{product.price}
 
@@ -41,7 +43,7 @@ function ProductCard({ product }){
 
 to={`/product/${product.id}`}
 
-className="btn btn-dark w-100 mb-2"
+className="btn btn-dark w-100 mb-2 premium-btn"
 
 >
 
@@ -51,7 +53,7 @@ className="btn btn-dark w-100 mb-2"
 
 <button
 
-className="btn btn-warning w-100"
+className="btn btn-warning w-100 premium-btn"
 
 onClick={() => addToCart(product)}
 

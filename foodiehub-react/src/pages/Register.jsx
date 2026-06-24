@@ -1,8 +1,8 @@
+import { Link } from 'react-router-dom';
+
 import { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-
-import Navbar from '../components/Navbar';
 
 function Register(){
 
@@ -57,21 +57,27 @@ function Register(){
 
         <div>
 
-            <Navbar />
+            <div className="hero hero-fade p-5 text-center mb-5">
 
-            <div className="container mt-5">
+<h1>🍔 FoodieHub</h1>
+
+<p>
+Join FoodieHub and start ordering amazing food
+</p>
 
                 <div className="row justify-content-center">
 
                     <div className="col-md-5">
 
-                        <div className="card p-4 shadow">
+                        <div className="card p-5 shadow glass-login">
 
-                            <h2 className="mb-4">
+                            <h2 className="text-center mb-2">
+    Create Account ✨
+</h2>
 
-                                Register
-
-                            </h2>
+<p className="text-center mb-4">
+    Join the FoodieHub Family
+</p>
 
                             <form onSubmit={handleRegister}>
 
@@ -79,7 +85,7 @@ function Register(){
 
                                 type="text"
 
-                                className="form-control mb-3"
+                                className="form-control premium-search mb-3"
 
                                 placeholder="Name"
 
@@ -95,7 +101,7 @@ function Register(){
 
                                 type="email"
 
-                                className="form-control mb-3"
+                                className="form-control premium-search mb-3"
 
                                 placeholder="Email"
 
@@ -111,7 +117,7 @@ function Register(){
 
                                 type="password"
 
-                                className="form-control mb-3"
+                                className="form-control premium-search mb-3"
 
                                 placeholder="Password"
 
@@ -125,7 +131,7 @@ function Register(){
 
                                 <select
 
-className="form-control mb-3"
+className="form-control premium-search mb-3"
 
 onChange={(e)=>
 
@@ -157,13 +163,34 @@ setRole(e.target.value)
 
                                 <button
 
-                                className="btn btn-warning w-100"
+                                className="btn btn-warning premium-btn w-100 py-3"
 
                                 >
 
                                     Register
 
                                 </button>
+
+                                <div className="text-center mt-4">
+
+    <hr />
+
+    <p className="mb-2">
+
+        New to FoodieHub?
+
+    </p>
+
+    <Link
+        to="/register"
+        className="btn btn-outline-warning"
+    >
+
+        Create Account
+
+    </Link>
+
+</div>
 
                             </form>
 

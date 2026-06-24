@@ -24,21 +24,39 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+@media (max-width:1024px){
+
+:root{
+
+font-size:16px;
+
+}
+
 }
 
 @media (prefers-color-scheme: dark) {
 }
 
 body{
+
 margin:0;
-background:#111111;
-color:#FFFFFF;
+
+background:
+linear-gradient(
+135deg,
+#111111,
+#1a1a1a,
+#2a2a2a
+);
+
+color:white;
+
 font-family:'Poppins',sans-serif;
+
 overflow-x:hidden;
+
 }
 
 .container{
@@ -65,19 +83,26 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
+}
   @media (max-width: 1024px) {
+    h1{
     font-size: 36px;
     margin: 20px 0;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
   }
+h2{
+font-size:24px;
+line-height:118%;
+letter-spacing:-0.24px;
+margin:0 0 8px;
+}
+
+@media (max-width:1024px){
+
+h2{
+font-size:20px;
+}
+
 }
 p {
   margin: 0;
@@ -101,11 +126,28 @@ code {
 /* DARK PREMIUM THEME */
 
 .card{
-background:#1E1E1E !important;
+
+background:
+rgba(255,255,255,.08) !important;
+
+backdrop-filter:
+blur(20px);
+
+-webkit-backdrop-filter:
+blur(20px);
+
+border:
+1px solid rgba(255,255,255,.15) !important;
+
 color:white !important;
-border:none !important;
-border-radius:20px !important;
-transition:.3s ease;
+
+border-radius:25px !important;
+
+box-shadow:
+0 8px 32px rgba(0,0,0,.25);
+
+transition:.4s ease;
+
 }
 
 .card:hover{
@@ -188,23 +230,32 @@ animation:ring 2s infinite;
 
 .hero{
 
+position:relative;
+
+overflow:hidden;
+
 background:
 linear-gradient(
-270deg,
-#111111,
-#1E1E1E,
-#111111
-);
+rgba(0,0,0,.55),
+rgba(0,0,0,.55)
+),
 
-background-size:600% 600%;
+url("https://images.unsplash.com/photo-1504674900247-0877df9cc836");
 
-animation:
-gradientMove 12s ease infinite;
+background-size:cover;
 
-border-radius:25px;
+background-position:center;
+
+backdrop-filter:blur(20px);
+
+-webkit-backdrop-filter:blur(20px);
+
+border:1px solid rgba(255,255,255,.08);
+
+border-radius:30px;
 
 box-shadow:
-0 0 30px rgba(244,180,0,.15);
+0 10px 40px rgba(0,0,0,.4);
 
 }
 
@@ -226,11 +277,19 @@ background-position:0% 50%;
 
 .premium-search{
 
-background:#1E1E1E !important;
+background:
+rgba(255,255,255,.08) !important;
 
-border:1px solid rgba(244,180,0,.3) !important;
+backdrop-filter:
+blur(15px);
+
+-webkit-backdrop-filter:
+blur(15px);
 
 color:white !important;
+
+border:
+1px solid rgba(244,180,0,.25) !important;
 
 border-radius:15px !important;
 
@@ -240,32 +299,50 @@ padding:12px !important;
 
 .premium-search:focus{
 
+background:
+rgba(255,255,255,.12) !important;
+
 box-shadow:
-0 0 20px rgba(244,180,0,.4) !important;
+0 0 25px rgba(244,180,0,.35) !important;
 
 border-color:#F4B400 !important;
+
+outline:none;
 
 }
 
 .product-card{
 
-background:#1E1E1E !important;
+background:
+rgba(255,255,255,.06) !important;
 
-border-radius:25px !important;
+backdrop-filter:
+blur(18px);
+
+-webkit-backdrop-filter:
+blur(18px);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:25px;
 
 overflow:hidden;
 
-transition:all .35s ease;
+transition:all .4s ease;
+
+animation:fadeUp .8s ease;
 
 }
 
 .product-card:hover{
 
 transform:
-translateY(-10px);
+translateY(-12px)
+scale(1.02);
 
 box-shadow:
-0 0 30px rgba(244,180,0,.45) !important;
+0 0 35px rgba(244,180,0,.35);
 
 }
 
@@ -302,20 +379,6 @@ transform:scale(1.03);
 
 animation:
 fadeUp .8s ease;
-
-}
-
-.product-card{
-
-background:#1E1E1E !important;
-
-border-radius:25px !important;
-
-overflow:hidden;
-
-transition:all .35s ease;
-
-animation:fadeUp .8s ease;
 
 }
 
@@ -362,12 +425,17 @@ transform:translateY(0);
 
 .premium-navbar{
 
-background:#111111 !important;
+background:
+rgba(0,0,0,.35) !important;
 
-border-bottom:1px solid #2a2a2a;
+backdrop-filter:
+blur(15px);
 
-box-shadow:
-0 0 25px rgba(244,180,0,.15);
+-webkit-backdrop-filter:
+blur(15px);
+
+border-bottom:
+1px solid rgba(255,255,255,.08);
 
 }
 
@@ -441,5 +509,205 @@ transform:rotate(-10deg);
 80%{
 transform:rotate(10deg);
 }
+
+}
+
+.glass-card{
+
+background:
+rgba(255,255,255,.08);
+
+backdrop-filter:
+blur(18px);
+
+-webkit-backdrop-filter:
+blur(18px);
+
+border:
+1px solid rgba(255,255,255,.12);
+
+border-radius:20px;
+
+}
+
+.hero-fade{
+
+animation:
+heroFade 1.2s ease;
+
+}
+
+@keyframes heroFade{
+
+from{
+
+opacity:0;
+
+transform:
+translateY(50px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:
+translateY(0);
+
+}
+
+}
+
+.hero{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.hero::before{
+
+content:"";
+
+position:absolute;
+
+top:-50%;
+
+left:-50%;
+
+width:200%;
+
+height:200%;
+
+background:
+
+radial-gradient(
+circle,
+rgba(244,180,0,.15),
+transparent 70%
+);
+
+animation:
+floatGlow 8s infinite linear;
+
+}
+
+@keyframes floatGlow{
+
+0%{
+transform:rotate(0deg);
+}
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+.hero h1{
+
+animation:
+floatText 3s ease-in-out infinite;
+
+}
+
+@keyframes floatText{
+
+0%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-6px);
+}
+
+100%{
+transform:translateY(0);
+}
+
+}
+
+.premium-search::placeholder{
+
+color:
+rgba(255,255,255,.55);
+
+}
+
+.form-select{
+
+background:
+rgba(255,255,255,.08) !important;
+
+color:white !important;
+
+border:
+1px solid rgba(244,180,0,.25) !important;
+
+}
+
+.form-select:focus{
+
+background:
+rgba(255,255,255,.12) !important;
+
+color:white !important;
+
+border-color:#F4B400 !important;
+
+box-shadow:
+0 0 20px rgba(244,180,0,.3) !important;
+
+}
+
+.form-select option{
+
+background:#1E1E1E;
+
+color:white;
+
+}
+
+.glass-login{
+
+background:
+rgba(255,255,255,.08) !important;
+
+backdrop-filter:
+blur(25px);
+
+-webkit-backdrop-filter:
+blur(25px);
+
+border:
+1px solid rgba(255,255,255,.12) !important;
+
+border-radius:25px !important;
+
+box-shadow:
+0 8px 32px rgba(0,0,0,.35);
+
+}
+
+.glass-login:hover{
+
+transform:translateY(-5px);
+
+box-shadow:
+0 0 35px rgba(244,180,0,.3);
+
+}
+
+.form-control::placeholder{
+
+color:#d1d5db !important;
+
+}
+
+.form-select{
+
+color:white !important;
 
 }

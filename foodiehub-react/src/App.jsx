@@ -19,11 +19,11 @@ import AdminPayments from './pages/AdminPayments';
 import AdminCoupons from './pages/AdminCoupons';
 import AddReview from "./pages/AddReview";
 
-const user = JSON.parse(
+function App(){
+
+  const user = JSON.parse(
 localStorage.getItem("user")
 );
-
-function App(){
 
   return(
 

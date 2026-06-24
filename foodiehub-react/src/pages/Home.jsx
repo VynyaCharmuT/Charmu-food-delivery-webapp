@@ -56,7 +56,7 @@ const [category, setCategory] = useState('All');
 
             <div className="container mt-5">
 
-                <div className="hero text-center p-5 mb-5">
+                <div className="hero hero-fade text-center py-5 mb-5">
 
 <h1 className="display-3 fw-bold">
 

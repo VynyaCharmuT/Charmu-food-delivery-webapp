@@ -8,6 +8,8 @@ import CartProvider from './context/CartContext';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import './index.css';
+
 ReactDOM.createRoot(
 
 document.getElementById('root')

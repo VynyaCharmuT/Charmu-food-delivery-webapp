@@ -76,7 +76,7 @@ return () => clearInterval(interval);
 
                 <button
 
-className="btn btn-outline-warning me-3"
+className="btn btn-warning position-relative me-3 premium-btn"
 
 onClick={() =>
 setShowMiniCart(!showMiniCart)
@@ -84,7 +84,11 @@ setShowMiniCart(!showMiniCart)
 
 >
 
-Cart (
+🛒 Cart
+
+<span
+className="badge bg-dark ms-2"
+>
 
 {cart.reduce(
 (total,item)=>
@@ -92,7 +96,7 @@ total + item.quantity,
 0
 )}
 
-)
+</span>
 
 </button>
 
@@ -133,22 +137,6 @@ total + item.quantity,
                             >
 
                                 Home
-
-                            </Link>
-
-                        </li>
-
-                        <li className="nav-item">
-
-                            <Link
-
-                            className="nav-link premium-link"
-
-                            to="/cart"
-
-                            >
-
-                                Cart
 
                             </Link>
 
@@ -223,7 +211,7 @@ className="position-absolute top-0 start-100 translate-middle badge rounded-pill
 showNotifications && (
 
 <div
-className="card shadow position-absolute"
+className="card glass-card shadow position-absolute"
 style={{
 right:"0",
 top:"50px",

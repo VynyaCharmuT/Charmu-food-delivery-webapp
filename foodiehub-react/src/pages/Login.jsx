@@ -1,8 +1,8 @@
+import { Link } from 'react-router-dom';
+
 import { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-
-import Navbar from '../components/Navbar';
 
 function Login(){
 
@@ -46,8 +46,6 @@ const data = await response.json();
 
 console.log("LOGIN RESPONSE:", data);
 
-alert(JSON.stringify(data));
-
         if(data.success){
 
             localStorage.setItem(
@@ -57,8 +55,6 @@ alert(JSON.stringify(data));
                 JSON.stringify(data.user)
 
             );
-
-            alert('Login Successful');
 
             if(data.user.role === 'admin'){
 
@@ -92,21 +88,27 @@ else{
 
         <div>
 
-            <Navbar />
+            <div className="hero hero-fade p-5 text-center mb-5">
 
-            <div className="container mt-5">
+<h1>🍔 FoodieHub</h1>
+
+<p>
+Premium Food Delivery Experience
+</p>
 
                 <div className="row justify-content-center">
 
                     <div className="col-md-5">
 
-                        <div className="card p-4 shadow">
+                        <div className="card p-5 shadow glass-login">
 
-                            <h2 className="mb-4">
+                            <h2 className="mb-2 text-center">
+    Welcome Back 👋
+</h2>
 
-                                Login
-
-                            </h2>
+<p className="text-center mb-4">
+    Login to FoodieHub
+</p>
 
                             <form onSubmit={handleLogin}>
 
@@ -114,7 +116,7 @@ else{
 
                                 type="email"
 
-                                className="form-control mb-3"
+                                className="form-control premium-search mb-3"
 
                                 placeholder="Email"
 
@@ -130,7 +132,7 @@ else{
 
                                 type="password"
 
-                                className="form-control mb-3"
+                                className="form-control premium-search mb-3"
 
                                 placeholder="Password"
 
@@ -144,7 +146,7 @@ else{
 
                                 <select
 
-                                className="form-control mb-3"
+    className="form-select premium-search mb-3"
 
                                 onChange={(e)=>
 
@@ -176,15 +178,36 @@ else{
 
                                 <button
 
-                                className="btn btn-warning w-100"
+className="btn btn-warning premium-btn w-100 py-3"
 
-                                >
+>
 
-                                    Login
+    Login
 
-                                </button>
+</button>
 
-                            </form>
+<div className="text-center mt-4">
+
+    <hr />
+
+    <p className="mb-2">
+
+        New to FoodieHub?
+
+    </p>
+
+    <Link
+        to="/register"
+        className="btn btn-outline-warning"
+    >
+
+        Create Account
+
+    </Link>
+
+</div>
+
+</form>
 
                         </div>
 

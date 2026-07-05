@@ -44,37 +44,38 @@ function Login(){
 
 const data = await response.json();
 
-console.log("LOGIN RESPONSE:", data);
+console.log("Login Response:", data);
 
         if(data.success){
 
-            localStorage.setItem(
+    localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+    );
 
-                'user',
+    console.log(
+    JSON.parse(localStorage.getItem("user"))
+);
 
-                JSON.stringify(data.user)
+    alert("Login Successful");
 
-            );
+    if(data.user.role === "admin"){
 
-            if(data.user.role === 'admin'){
+        window.location.href = "/admin/dashboard";
 
-    navigate('/admin/dashboard');
+    }
+    else if(data.user.role === "delivery"){
+
+        window.location.href = "/delivery/dashboard";
+
+    }
+    else{
+
+        window.location.href = "/";
+
+    }
 
 }
-
-else if(data.user.role === 'delivery'){
-
-    navigate('/delivery/dashboard');
-
-}
-
-else{
-
-    navigate('/');
-
-}
-
-        }
 
         else{
 

@@ -1,21 +1,15 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
-function ProtectedRoute({ children }){
+function ProtectedRoute({ children }) {
 
-    const user = JSON.parse(
+    const user = JSON.parse(localStorage.getItem("user"));
+    const location = useLocation();
 
-        localStorage.getItem('user')
-
-    );
-
-    if(!user){
-
-        return <Navigate to="/login" />
-
+    if (!user) {
+        return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
     return children;
-
 }
 
 export default ProtectedRoute;

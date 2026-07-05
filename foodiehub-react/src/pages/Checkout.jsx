@@ -6,25 +6,69 @@ import Navbar from '../components/Navbar';
 
 import { CartContext } from '../context/CartContext';
 
+import PaymentModal from "../components/PaymentModal";
+
+import PaymentSuccess from "../components/PaymentSuccess";
+
 function Checkout(){
 
     const navigate = useNavigate();
 
     const { cart, grandTotal, setCart } = useContext(CartContext);
 
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState({
 
-    const [phone, setPhone] = useState('');
+fullName:"",
+
+phone:"",
+
+houseNo:"",
+
+street:"",
+
+landmark:"",
+
+city:"",
+
+state:"",
+
+pincode:""
+
+});
 
     const [paymentMethod, setPaymentMethod] = useState('COD');
+
+    const [upiId, setUpiId] = useState("");
+
+    const [cardNumber, setCardNumber] = useState("");
+
+    const [cardName, setCardName] = useState("");
+
+    const [expiry, setExpiry] = useState("");
+
+    const [cvv, setCvv] = useState("");
+
+    const [selectedBank, setSelectedBank] = useState("");
+
+    const [paymentDone, setPaymentDone] = useState(false);
+
+    const [showOtp,setShowOtp]=useState(false);
+
+    const [otp,setOtp]=useState("");
+
+    const [generatedOtp,setGeneratedOtp]=useState("");
+
+    const [processingPayment, setProcessingPayment] = useState(false);
+
+    const [showPaymentModal,setShowPaymentModal]=useState(false);
+
+    const [showSuccess,setShowSuccess]=useState(false);
 
     const [couponCode, setCouponCode] = useState('');
     
     const [discount, setDiscount] = useState(0);
 
     const [coupons,setCoupons] = useState([]);
-    
-    const [selectedCoupon,setSelectedCoupon] = useState(null);
 
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
@@ -43,6 +87,18 @@ function Checkout(){
     const [sideType,setSideType] = useState("None");
 
     const [sideQuantity,setSideQuantity] = useState(0);
+
+    const handleAddressChange = (e) => {
+
+setAddress({
+
+...address,
+
+[e.target.name]:e.target.value
+
+});
+
+};
 
     const user = JSON.parse(
 
@@ -121,7 +177,13 @@ fetch(
 
 if(data.display_name){
 
-setAddress(data.display_name);
+setAddress(prev=>({
+
+...prev,
+
+street:data.display_name
+
+}));
 
 }
 
@@ -162,10 +224,34 @@ data.discount_percentage) / 100;
 };
 
     const placeOrder = async () => {
+
+        if(paymentMethod !== "COD" && !paymentDone){
+
+alert("Please complete the payment first.");
+
+return;
+
+}
         if(isPlacingOrder) return;
 
 setIsPlacingOrder(true);
-        if(!address || !phone){
+        if(
+
+!address.fullName ||
+
+!address.phone ||
+
+!address.houseNo ||
+
+!address.street ||
+
+!address.city ||
+
+!address.state ||
+
+!address.pincode
+
+){
 
     alert("Please fill all details");
 
@@ -178,6 +264,15 @@ setIsPlacingOrder(true);
     try{
 
         console.log("PLACE ORDER STARTED");
+
+        const fullAddress = `
+${address.houseNo},
+${address.street},
+${address.landmark ? address.landmark + "," : ""}
+${address.city},
+${address.state}
+- ${address.pincode}
+`;
 
         const response = await fetch(
 
@@ -198,8 +293,8 @@ setIsPlacingOrder(true);
 user_id:user.id,
 total_amount: grandTotal + addonTotal - discount,
 payment_method:paymentMethod,
-address,
-phone,
+address: fullAddress,
+phone: address.phone,
 latitude,
 longitude,
 persons,
@@ -230,7 +325,29 @@ cart
         
         setIsPlacingOrder(false);
 
-        navigate('/orders');
+        setPaymentDone(false);
+
+setShowOtp(false);
+
+setOtp("");
+
+setGeneratedOtp("");
+
+setUpiId("");
+
+setCardNumber("");
+
+setCardName("");
+
+setExpiry("");
+
+setCvv("");
+
+setSelectedBank("");
+
+setShowSuccess(true);
+
+        setShowSuccess(true);
 
     }
 
@@ -247,79 +364,325 @@ cart
 
     return(
 
+        <>
+
         <div>
 
             <Navbar />
 
             <div className="container mt-5">
 
-                <div className="row justify-content-center">
+                <div className="row">
 
-                    <div className="col-md-6">
+    <div className="col-lg-7">
 
-                        <div className="card shadow p-4">
+                        <div className="card shadow glass-card checkout-card p-4">
 
-                            <h2 className="mb-4">
+                            <h2>
 
-                                Checkout
+📍 Delivery Details
 
-                            </h2>
+</h2>
 
-                            <input
+<p className="text-muted">
+
+Fill your delivery information below.
+
+</p>
+
+<hr/>
+
+<div className="row">
+
+<div className="col-md-6">
+
+<input
 type="text"
-className="form-control mb-3"
-placeholder="Delivery Address"
-value={address}
-onChange={(e)=>setAddress(e.target.value)}
+name="fullName"
+className="form-control premium-search mb-3"
+placeholder="Full Name"
+value={address.fullName}
+onChange={handleAddressChange}
 />
 
-                            <input
+</div>
 
-                            type="text"
+<div className="col-md-6">
 
-                            className="form-control mb-3"
+<input
+type="tel"
+maxLength="10"
+name="phone"
+className="form-control premium-search mb-3"
+placeholder="Phone Number"
+value={address.phone}
+onChange={(e)=>{
 
-                            placeholder="Phone Number"
+const value=e.target.value
+.replace(/\D/g,"")
+.substring(0,10);
 
-                            onChange={(e)=>
+setAddress({
 
-                            setPhone(e.target.value)
+...address,
 
-                            }
+phone:value
 
-                            />
+});
 
-                            <select
+}}
+/>
 
-                            className="form-control mb-4"
+</div>
 
-                            onChange={(e)=>
+<div className="col-md-6">
 
-                            setPaymentMethod(e.target.value)
+<input
+type="text"
+name="houseNo"
+className="form-control premium-search mb-3"
+placeholder="House / Flat No."
+value={address.houseNo}
+onChange={handleAddressChange}
+/>
 
-                            }
+</div>
 
-                            >
+<div className="col-md-6">
 
-                                <option>
+<input
+type="text"
+name="street"
+className="form-control premium-search mb-3"
+placeholder="Street / Area"
+value={address.street}
+onChange={handleAddressChange}
+/>
 
-                                    COD
+</div>
 
-                                </option>
+<div className="col-md-6">
 
-                                <option>
+<input
+type="text"
+name="landmark"
+className="form-control premium-search mb-3"
+placeholder="Landmark"
+value={address.landmark}
+onChange={handleAddressChange}
+/>
 
-                                    UPI
+</div>
 
-                                </option>
+<div className="col-md-6">
 
-                                <option>
+<input
+type="text"
+name="city"
+className="form-control premium-search mb-3"
+placeholder="City"
+value={address.city}
+onChange={handleAddressChange}
+/>
 
-                                    Card
+</div>
 
-                                </option>
+<div className="col-md-6">
 
-                            </select>
+<input
+type="text"
+name="state"
+className="form-control premium-search mb-3"
+placeholder="State"
+value={address.state}
+onChange={handleAddressChange}
+/>
+
+</div>
+
+<div className="col-md-6">
+
+<input
+type="text"
+maxLength="6"
+name="pincode"
+className="form-control premium-search mb-4"
+placeholder="Pincode"
+value={address.pincode}
+onChange={(e)=>{
+
+const value=e.target.value
+.replace(/\D/g,"")
+.substring(0,6);
+
+setAddress({
+
+...address,
+
+pincode:value
+
+});
+
+}}
+/>
+
+</div>
+
+</div>
+
+<h4 className="mb-4">
+
+💳 Choose Payment Method
+
+</h4>
+
+<div className="row g-3 mb-4">
+
+<div className="col-md-6">
+
+<div
+
+className={`payment-card ${
+paymentMethod==="COD" ? "active-payment" : ""
+}`}
+
+onClick={()=>{
+
+setPaymentMethod("COD");
+
+setPaymentDone(false);
+
+}}
+
+>
+
+<h5>💵 Cash on Delivery</h5>
+
+<p>Pay after your food arrives.</p>
+
+</div>
+
+</div>
+
+
+
+<div className="col-md-6">
+
+<div
+
+className={`payment-card ${
+paymentMethod==="UPI" ? "active-payment" : ""
+}`}
+
+onClick={() => {
+
+setPaymentMethod("UPI");
+
+setPaymentDone(false);
+
+}}
+
+>
+
+<h5>📱 UPI</h5>
+
+<p>
+
+Google Pay • PhonePe • Paytm
+
+</p>
+
+</div>
+
+</div>
+
+<div className="col-md-6">
+
+<div
+
+className={`payment-card ${
+paymentMethod==="Card" ? "active-payment" : ""
+}`}
+
+onClick={() => {
+
+setPaymentMethod("Card");
+
+setPaymentDone(false);
+
+}}
+
+>
+
+<h5>💳 Credit / Debit Card</h5>
+
+<p>Visa • Mastercard • RuPay</p>
+
+</div>
+
+</div>
+
+<div className="col-md-6">
+
+<div
+
+className={`payment-card ${
+paymentMethod==="Net Banking" ? "active-payment" : ""
+}`}
+
+onClick={() => {
+
+setPaymentMethod("Net Banking");
+
+setPaymentDone(false);
+
+}}
+
+>
+
+<h5>🏦 Net Banking</h5>
+
+<p>All Major Banks</p>
+
+</div>
+
+</div>
+
+</div>
+
+<p className="text-warning fw-bold">
+
+Selected Payment: {paymentMethod}
+
+</p>
+
+{
+paymentDone && (
+
+<div className="alert alert-success mt-3">
+
+✅ Payment Successful
+
+</div>
+
+)
+}
+
+{paymentMethod === "COD" && (
+
+<div className="glass-card p-4 mb-4">
+
+<h5>💵 Cash On Delivery</h5>
+
+<p className="text-muted">
+
+Pay when your order reaches your doorstep.
+
+</p>
+
+</div>
+
+)}
 
                             <h4 className="mb-3">
 
@@ -394,7 +757,7 @@ onChange={(e)=>setSideType(e.target.value)}
 <input
 type="number"
 min="0"
-className="form-control mb-4"
+className="form-control premium-search mb-4"
 value={sideQuantity}
 onChange={(e)=>setSideQuantity(Number(e.target.value))}
 />
@@ -508,18 +871,6 @@ Apply Coupon
 
 </button>
 
-                            <h5>
-
-Subtotal:
-₹{grandTotal}
-
-</h5>
-
-<h5>
-Add-ons:
-₹{addonTotal}
-</h5>
-
 <p className="text-muted">
 
 Free Sauces:
@@ -527,61 +878,275 @@ Free Sauces:
 
 </p>
 
-<h5>
+</div>
 
-Discount:
-₹{discount}
+</div>   {/* closes col-lg-7 */}
+
+<div className="col-lg-5">
+
+<div
+className="card shadow glass-card checkout-card summary-card p-4"
+style={{
+position:"sticky",
+top:"100px"
+}}
+>   
+
+<h3 className="mb-4">
+
+🛒 Order Summary
+
+</h3>
+
+<h5 className="mb-3">
+
+Items
 
 </h5>
 
 {
-discount > 0 && (
 
-<p className="text-success fw-bold">
+cart.map(item=>(
 
-🎉 You Saved ₹{discount}
+<div
+
+key={item.id}
+
+className="d-flex justify-content-between mb-2"
+
+>
+
+<div>
+
+{item.name}
+
+×
+
+{item.quantity}
+
+</div>
+
+<div>
+
+₹{item.price*item.quantity}
+
+</div>
+
+</div>
+
+))
+
+}
+
+<hr/>
+
+<h5>
+
+Subtotal
+
+<span className="float-end">
+
+₹{grandTotal}
+
+</span>
+
+</h5>
+
+<h5>
+
+Add-ons
+
+<span className="float-end">
+
+₹{addonTotal}
+
+</span>
+
+</h5>
+
+<h5>
+
+Discount
+
+<span className="float-end text-success">
+
+-₹{discount}
+
+</span>
+
+</h5>
+
+<hr/>
+
+<p className="text-muted">
+
+Delivery Fee
+
+<span className="float-end">
+
+FREE
+
+</span>
 
 </p>
 
-)
-}
+<hr/>
 
-<h3 className="mb-4 text-success">
+<h3>
 
-Final Total:
-₹{
-grandTotal
-+
-addonTotal
--
-discount
-}
+Total
+
+<span className="float-end text-warning">
+
+₹{grandTotal+addonTotal-discount}
+
+</span>
 
 </h3>
 
-                            <button
-    className="btn btn-warning w-100"
-    onClick={placeOrder}
-    disabled={isPlacingOrder}
+<button
+
+className="btn btn-warning premium-btn w-100 mt-4"
+
+onClick={()=>{
+
+if(paymentMethod==="COD"){
+
+placeOrder();
+
+}
+else{
+
+setShowPaymentModal(true);
+
+}
+
+}}
+
+disabled={isPlacingOrder}
+
 >
-    {
-        isPlacingOrder
-        ? "Placing Order..."
-        : "Place Order"
-    }
+
+{
+isPlacingOrder
+?
+"Placing Order..."
+:
+paymentMethod==="COD"
+?
+"Place Order"
+:
+"Proceed to Payment"
+}
+
 </button>
 
-                        </div>
+                    </div>   {/* Summary Card */}
 
-                    </div>
+</div>   {/* col-lg-5 */}
 
-                </div>
+</div>   {/* row */}
 
-            </div>
+</div>   {/* container */}
 
-        </div>
+</div>
 
-    )
+
+<PaymentModal
+
+show={showPaymentModal}
+
+paymentMethod={paymentMethod}
+
+paymentDone={paymentDone}
+
+processingPayment={processingPayment}
+
+setProcessingPayment={setProcessingPayment}
+
+setPaymentDone={setPaymentDone}
+
+upiId={upiId}
+
+setUpiId={setUpiId}
+
+cardNumber={cardNumber}
+
+setCardNumber={setCardNumber}
+
+cardName={cardName}
+
+setCardName={setCardName}
+
+expiry={expiry}
+
+setExpiry={setExpiry}
+
+cvv={cvv}
+
+setCvv={setCvv}
+
+selectedBank={selectedBank}
+
+setSelectedBank={setSelectedBank}
+
+total={grandTotal + addonTotal - discount}
+
+showOtp={showOtp}
+
+setShowOtp={setShowOtp}
+
+otp={otp}
+
+setOtp={setOtp}
+
+generatedOtp={generatedOtp}
+
+setGeneratedOtp={setGeneratedOtp}
+
+onClose={(success)=>{
+
+setShowPaymentModal(false);
+
+if(success){
+
+placeOrder();
+
+}
+
+}
+
+}
+
+/>
+
+<PaymentSuccess
+
+show={showSuccess}
+
+onClose={()=>{
+
+setShowSuccess(false);
+
+setPaymentDone(false);
+
+navigate("/order-success",{
+
+state:{
+
+amount:grandTotal + addonTotal - discount,
+
+paymentMethod
+
+}
+
+});
+
+}}
+
+/>
+</>
+    );
 
 }
 

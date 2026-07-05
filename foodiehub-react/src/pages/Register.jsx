@@ -45,11 +45,30 @@ function Register(){
 
         });
 
-        const data = await response.json();
+        const text = await response.text();
 
-        alert(data.message);
+console.log("PHP Response:", text);
 
-        navigate('/login');
+try{
+
+    const data = JSON.parse(text);
+
+    alert(data.message);
+
+    if(data.success){
+
+        navigate("/login");
+
+    }
+
+}
+catch(error){
+
+    console.log(error);
+
+    alert("Server Error. Check register.php");
+
+}
 
     }
 
@@ -79,13 +98,18 @@ Join FoodieHub and start ordering amazing food
     Join the FoodieHub Family
 </p>
 
-                            <form onSubmit={handleRegister}>
+                            <form
+onSubmit={handleRegister}
+autoComplete="off"
+>
 
                                 <input
 
                                 type="text"
 
-                                className="form-control premium-search mb-3"
+                                autoComplete="off"
+
+                                className="form-select premium-search mb-3"
 
                                 placeholder="Name"
 
@@ -101,6 +125,8 @@ Join FoodieHub and start ordering amazing food
 
                                 type="email"
 
+                                autoComplete="off"
+
                                 className="form-control premium-search mb-3"
 
                                 placeholder="Email"
@@ -114,8 +140,8 @@ Join FoodieHub and start ordering amazing food
                                 />
 
                                 <input
-
-                                type="password"
+type="password"
+autoComplete="new-password"
 
                                 className="form-control premium-search mb-3"
 
@@ -176,18 +202,14 @@ setRole(e.target.value)
     <hr />
 
     <p className="mb-2">
-
-        New to FoodieHub?
-
+        Already have an account?
     </p>
 
     <Link
-        to="/register"
+        to="/login"
         className="btn btn-outline-warning"
     >
-
-        Create Account
-
+        Login Here
     </Link>
 
 </div>

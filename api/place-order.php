@@ -141,7 +141,8 @@ if($conn->query($sql)){
 
     die(json_encode([
     "success" => true,
-    "message" => "Order Placed Successfully"
+    "message" => "Order Placed Successfully",
+    "order_id" => $order_id
 ]));
 
 }

@@ -18,11 +18,12 @@ import DeliveryDashboard from './pages/DeliveryDashboard';
 import AdminPayments from './pages/AdminPayments';
 import AdminCoupons from './pages/AdminCoupons';
 import AddReview from "./pages/AddReview";
+import OrderSuccess from "./pages/OrderSuccess";
 
 function App(){
 
   const user = JSON.parse(
-localStorage.getItem("user")
+    localStorage.getItem("user")
 );
 
   return(
@@ -34,13 +35,68 @@ localStorage.getItem("user")
         <Route path="/"element={user?<Home />:<Navigate to="/login" />}/>
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/track/:id" element={<TrackOrder />} />
-        <Route path="/admin/orders" element={<AdminOrders />} />
-        <Route path="/admin/products" element={<AdminProducts />} />
-        <Route path="/admin/add-product" element={<AddProduct />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
-        <Route path="/admin/payments" element={<AdminPayments />} />
-        <Route path="/admin/coupons" element={<AdminCoupons />} />
+        <Route
+path="/admin/orders"
+element={
+<ProtectedRoute>
+<AdminOrders />
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/admin/products"
+element={
+<ProtectedRoute>
+<AdminProducts />
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/admin/add-product"
+element={
+<ProtectedRoute>
+<AddProduct />
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/admin/dashboard"
+element={
+<ProtectedRoute>
+<AdminDashboard />
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/delivery/dashboard"
+element={
+<ProtectedRoute>
+<DeliveryDashboard />
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/admin/payments"
+element={
+<ProtectedRoute>
+<AdminPayments />
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/admin/coupons"
+element={
+<ProtectedRoute>
+<AdminCoupons />
+</ProtectedRoute>
+}
+/>
         <Route path="/add-review/:orderId" element={<AddReview />} />
         <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
         <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>}/>
@@ -49,6 +105,10 @@ localStorage.getItem("user")
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route
+path="/order-success"
+element={<OrderSuccess />}
+/>
 
       </Routes>
 

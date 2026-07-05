@@ -12,6 +12,18 @@ include '../includes/db.php';
 
 $data = json_decode(file_get_contents("php://input"));
 
+$data = json_decode(file_get_contents("php://input"));
+
+if(!$data){
+
+    echo json_encode([
+        "success"=>false,
+        "message"=>"No Data Received"
+    ]);
+
+    exit;
+}
+
 $name = $data->name;
 
 $email = $data->email;
@@ -30,19 +42,36 @@ $sql = "INSERT INTO users(name, email, password, role)
 
 VALUES('$name', '$email', '$password', '$role')";
 
-if($conn->query($sql)){
+try{
 
-    echo json_encode([
-        "message" => "User Registered"
-    ]);
+    if($conn->query($sql)){
+
+        echo json_encode([
+            "success"=>true,
+            "message"=>"Registration Successful"
+        ]);
+
+    }
 
 }
+catch(mysqli_sql_exception $e){
 
-else{
+    if(str_contains($e->getMessage(),"Duplicate")){
 
-    echo json_encode([
-        "message" => "Registration Failed"
-    ]);
+        echo json_encode([
+            "success"=>false,
+            "message"=>"Email already exists."
+        ]);
+
+    }
+    else{
+
+        echo json_encode([
+            "success"=>false,
+            "message"=>$e->getMessage()
+        ]);
+
+    }
 
 }
 
